@@ -4,20 +4,17 @@ class CalculationsController < ApplicationController
     @text = params[:user_text]
     @special_word = params[:user_word]
 
-    # ================================================================================
-    # Your code goes below.
-    # The text the user input is in the string @text.
-    # The special word the user input is in the string @special_word.
-    # ================================================================================
 
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    number_of_spaces = @text.count(' ')
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @character_count_with_spaces = @text.length
 
-    @word_count = "Replace this string with your answer."
+    @character_count_without_spaces = @text.length - number_of_spaces
 
-    @occurrences = "Replace this string with your answer."
+    @word_count = @text.split.length
+
+    @occurrences = @text.split.count(@special_word.to_s)
   end
 
   def loan_payment
