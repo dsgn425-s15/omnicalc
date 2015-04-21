@@ -22,6 +22,9 @@ class CalculationsController < ApplicationController
     @years = params[:number_of_years].to_i
     @principal = params[:principal_value].to_f
 
+    # formula: PMT = (P*r)/(1-(1+r)^-N)
+
+    pmt = (@principal*@apr/100)/(1-(1+@apr/100)**(-1*@years))
     # ================================================================================
     # Your code goes below.
     # The annual percentage rate the user input is in the decimal @apr.
@@ -29,7 +32,7 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    @monthly_payment = pmt.to_s
   end
 
   def time_between
@@ -45,12 +48,12 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = @ending - @starting
+    @minutes = @seconds/60
+    @hours = @minutes/60
+    @days = @hours/24
+    @weeks = @days/7
+    @years = @weeks/52
   end
 
   def descriptive_statistics
