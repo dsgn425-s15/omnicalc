@@ -1,5 +1,6 @@
 class CalculationsController < ApplicationController
 
+
   def word_count
     @text = params[:user_text]
     @special_word = params[:user_word]
@@ -57,32 +58,72 @@ class CalculationsController < ApplicationController
   end
 
   def descriptive_statistics
-    @numbers = params[:list_of_numbers].gsub(',', '').split.map(&:to_f)
-
+    #@numbers = params[:list_of_numbers].gsub(',', '').split.map(&:to_f)
+    @numbers = params[:list_of_numbers].split(',').map(&:to_f)
+    #@numbers = params[:list_of_numbers]
     # ================================================================================
     # Your code goes below.
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
 
-    @count = "Replace this string with your answer."
+    def sum_me(number_array_to_sum)
+        sum = 0
+        number_array_to_sum.each do |rolling|
+            sum = sum + rolling
+        end
+    return sum
+    end
 
-    @minimum = "Replace this string with your answer."
 
-    @maximum = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort
 
-    @range = "Replace this string with your answer."
+    @count = @numbers.length
 
-    @median = "Replace this string with your answer."
 
-    @sum = "Replace this string with your answer."
+    @minimum = @numbers.sort[0]
 
-    @mean = "Replace this string with your answer."
+    @maximum = @numbers.sort[@numbers.length-1]
 
-    @variance = "Replace this string with your answer."
+    @range = @maximum - @minimum
+    numbers_length = @numbers.length
+    numbers_length_half = numbers_length/2
 
-    @standard_deviation = "Replace this string with your answer."
+    median =''.to_f
+
+    if numbers_length%2 == 0
+       median = (@numbers.sort[numbers_length/2] + @numbers.sort[numbers_length/2-1])/2
+    end
+
+  if numbers_length%2 == 1
+       median = @numbers.sort[numbers_length/2+0.5]
+    end
+
+    @median = median
+    sum = sum_me(@numbers)
+
+
+
+
+    @sum = sum
+
+    @mean = sum/@numbers.length
+
+    array_for_variance = []
+    variance_calc1 = 0
+    @numbers.each do |variance_variable|
+        variance_calc1 = (variance_variable-@mean)**2
+        array_for_variance.push(variance_calc1)
+    end
+
+    variance = sum_me(array_for_variance)/array_for_variance.length
+
+
+    @variance = variance
+
+    @standard_deviation = variance**0.5
+
+
 
     @mode = "Replace this string with your answer."
   end
