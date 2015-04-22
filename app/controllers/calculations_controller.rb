@@ -13,7 +13,7 @@ class CalculationsController < ApplicationController
 
     @character_count_with_spaces = @text.length
 
-    @character_count_without_spaces = @character_count_with_spaces - (@text.split(' ').length-1)
+    @character_count_without_spaces = @character_count_with_spaces - (@text.split(' ').length-1) - (@text.reverse.index(/[^ ]/)) - (@text.index(/[^ ]/))
     # Revisit to try and account for spaces at end of sentence entered
 
     @word_count = @text.split(' ').count
@@ -39,7 +39,7 @@ def loan_payment
         # N = periods (years)
         # formula: PMT = (P*r)/(1-(1+r)^-N)
 
-    @monthly_payment = (@principal*@apr)/(1-(1+@apr)**-@years)
+    @monthly_payment = (@principal*(@apr/100))/(1-(1+@apr/100)**-(@years*12))
 end
 
 def time_between
@@ -55,12 +55,12 @@ def time_between
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = @ending - @starting
+    @minutes = @seconds/60
+    @hours = @minutes/60
+    @days = @hours/24
+    @weeks = @days/7
+    @years = @days/365
 end
 
 def descriptive_statistics
