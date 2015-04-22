@@ -11,16 +11,18 @@ class CalculationsController < ApplicationController
     # ================================================================================
 
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_with_spaces = @text.length
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @character_count_without_spaces = @character_count_with_spaces - (@text.split(' ').length-1)
+    # Revisit to try and account for spaces at end of sentence entered
 
-    @word_count = "Replace this string with your answer."
+    @word_count = @text.split(' ').count
 
-    @occurrences = "Replace this string with your answer."
-  end
+    @occurrences = @text.scan(/\w+/).count(@special_word)
 
-  def loan_payment
+end
+
+def loan_payment
     @apr = params[:annual_percentage_rate].to_f
     @years = params[:number_of_years].to_i
     @principal = params[:principal_value].to_f
@@ -33,9 +35,9 @@ class CalculationsController < ApplicationController
     # ================================================================================
 
     @monthly_payment = "Replace this string with your answer."
-  end
+end
 
-  def time_between
+def time_between
     @starting = Chronic.parse(params[:starting_time])
     @ending = Chronic.parse(params[:ending_time])
 
@@ -54,9 +56,9 @@ class CalculationsController < ApplicationController
     @days = "Replace this string with your answer."
     @weeks = "Replace this string with your answer."
     @years = "Replace this string with your answer."
-  end
+end
 
-  def descriptive_statistics
+def descriptive_statistics
     @numbers = params[:list_of_numbers].gsub(',', '').split.map(&:to_f)
 
     # ================================================================================
@@ -85,5 +87,5 @@ class CalculationsController < ApplicationController
     @standard_deviation = "Replace this string with your answer."
 
     @mode = "Replace this string with your answer."
-  end
+end
 end
