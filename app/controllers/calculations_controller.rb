@@ -34,7 +34,12 @@ def loan_payment
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+        # r = apr/100
+        # P = principal
+        # N = periods (years)
+        # formula: PMT = (P*r)/(1-(1+r)^-N)
+
+    @monthly_payment = (@principal*@apr)/(1-(1+@apr)**-@years)
 end
 
 def time_between
