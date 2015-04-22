@@ -11,14 +11,20 @@ class CalculationsController < ApplicationController
     # ================================================================================
 
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_with_spaces = @text.length
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    spaces = @text.count " "
 
-    @word_count = "Replace this string with your answer."
+    @character_count_without_spaces = @character_count_with_spaces - spaces
 
-    @occurrences = "Replace this string with your answer."
-  end
+    @word_count = word_count = spaces + 1
+
+    special_chars = @text.count "#{@special_word}"
+    special_word = special_chars.to_i/@special_word.length
+
+    @occurrences = special_word
+
+end
 
   def loan_payment
     @apr = params[:annual_percentage_rate].to_f
@@ -32,7 +38,11 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    r=@apr/100/12.to_f
+    n =@years*12
+
+    @monthly_payment = (@principal*r/(1-((1+r)**-n)))
+
   end
 
   def time_between
