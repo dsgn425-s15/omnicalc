@@ -14,11 +14,11 @@ class CalculationsController < ApplicationController
     @character_count_with_spaces = @text.length
 
     @character_count_without_spaces = @character_count_with_spaces - (@text.split(' ').length-1) - (@text.reverse.index(/[^ ]/)) - (@text.index(/[^ ]/))
-    # Revisit to try and account for spaces at end of sentence entered
+    # character count with spaces - spaces between words - spaces at end - spaces at beginning
 
     @word_count = @text.split(' ').count
 
-    @occurrences = @text.scan(/\w+/).count(@special_word)
+    @occurrences = @text.downcase.scan(@special_word.downcase).count
 
 end
 
@@ -34,12 +34,7 @@ def loan_payment
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-        # r = apr/100
-        # P = principal
-        # N = periods (years)
-        # formula: PMT = (P*r)/(1-(1+r)^-N)
-
-    @monthly_payment = (@principal*(@apr/100))/(1-(1+@apr/100)**-(@years*12))
+    @monthly_payment = (@principal*(@apr/100/12))/(1-(1+@apr/100/12)**-(@years*12))
 end
 
 def time_between
@@ -71,26 +66,36 @@ def descriptive_statistics
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    # def median_array_of_numbers
+    #     @median =
+    #     if array_of_numbers % 2 !=0
+    #         (array_of_numbers.length +1) / 2
+    #     else
+    #         ((array_of_numbers.length/2)+((array_of_numbers.length+2)/2)/2)
+    #     end
+    # end
 
-    @count = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort_by(&:to_i)
 
-    @minimum = "Replace this string with your answer."
+    @count = @numbers.count
 
-    @maximum = "Replace this string with your answer."
+    @minimum = @numbers.min
 
-    @range = "Replace this string with your answer."
+    @maximum = @numbers.max
 
-    @median = "Replace this string with your answer."
+    @range = @maximum - @minimum
+    # adjust for negative values
 
-    @sum = "Replace this string with your answer."
+    # @median = @median
 
-    @mean = "Replace this string with your answer."
+    @sum = @numbers.reduce(:+)
 
-    @variance = "Replace this string with your answer."
+    @mean = @sum/@count
 
-    @standard_deviation = "Replace this string with your answer."
+    # @variance = "Replace this string with your answer."
 
-    @mode = "Replace this string with your answer."
+    # @standard_deviation = "Replace this string with your answer."
+
+    # @mode = "Replace this string with your answer."
 end
 end
