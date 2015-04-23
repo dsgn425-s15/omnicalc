@@ -25,7 +25,7 @@ class CalculationsController < ApplicationController
 
     # formula: PMT = (P*r)/(1-(1+r)^-N)
 
-    pmt = (@principal*@apr/100)/(1-(1+@apr/100)**(-1*@years))
+    pmt = (@principal*@apr/1200)/(1-(1+@apr/1200)**(-12*@years))
     # ================================================================================
     # Your code goes below.
     # The annual percentage rate the user input is in the decimal @apr.
@@ -125,6 +125,69 @@ class CalculationsController < ApplicationController
 
 
 
-    @mode = "Replace this string with your answer."
+
+##mode stuff begins
+
+numbers_sorted = @numbers.sort
+
+
+
+counter = 0
+while_counter = 0
+i = numbers_sorted[0]
+count_of_current_number = 0
+hashes = []
+hash_counter = 0
+
+while counter < numbers_sorted.length
+
+  i = numbers_sorted[counter]
+  #puts "current number under consideration is #{numbers_sorted[counter]}"
+
+  if numbers_sorted[counter+1] == i
+    count_of_current_number = count_of_current_number + 1
+     #puts "count of current number is #{count_of_current_number}"
+  end
+
+
+
+  if numbers_sorted[counter+1] != i
+    hashes[hash_counter] = { "number" => i.to_s , "count" => (count_of_current_number+1).to_s}
+    #puts "Current number counter is #{hashes[hash_counter]}"
+
+    count_of_current_number = 0
+    hash_counter = hash_counter+1
+
+  end
+  counter = counter+1
+
+  #puts "lenght of hashes is #{hashes.length}"
+
+end
+
+counter2 = 0
+
+countsArray = []
+numbersArray = []
+
+while counter2 < hashes.length
+  #puts hashes[counter2].to_s
+  numbersArray[counter2] = hashes[counter2]["number"]
+  countsArray[counter2] = hashes[counter2]["count"]
+  counter2 = counter2+1
+end
+
+# puts numbersArray.to_s
+# puts countsArray.to_s
+
+modeIndex = countsArray.index(countsArray.max)
+
+mode = numbersArray[modeIndex]
+
+
+
+
+    @mode = mode
+    #yesss
   end
 end
