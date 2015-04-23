@@ -92,7 +92,14 @@ def descriptive_statistics
 
     @mean = @sum/@count
 
-    # @variance = "Replace this string with your answer."
+    # @variance = variance_calc
+
+    # def variance_calc
+    #     @numbers.each do |var|
+    #     (|var|-@mean)**2
+    # end
+# # need to sum the def above and divide by the count
+# pine pg 88
 
     # @standard_deviation = "Replace this string with your answer."
 
