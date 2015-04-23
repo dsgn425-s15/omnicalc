@@ -66,14 +66,6 @@ def descriptive_statistics
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    # def median_array_of_numbers
-    #     @median =
-    #     if array_of_numbers % 2 !=0
-    #         (array_of_numbers.length +1) / 2
-    #     else
-    #         ((array_of_numbers.length/2)+((array_of_numbers.length+2)/2)/2)
-    #     end
-    # end
 
     @sorted_numbers = @numbers.sort_by(&:to_i)
 
@@ -84,25 +76,54 @@ def descriptive_statistics
     @maximum = @numbers.max
 
     @range = @maximum - @minimum
-    # adjust for negative values
 
-    # @median = @median
+    @median = median_array_of_numbers(@sorted_numbers)
 
     @sum = @numbers.reduce(:+)
 
     @mean = @sum/@count
 
-    # @variance = variance_calc
+  end
+
+  def median_array_of_numbers(input_array)
+    if input_array.length % 2 !=0
+      median_position = input_array.length / 2
+      return input_array[median_position]
+    else
+      first_position = input_array.length / 2
+      second_position = (input_array.length / 2) - 1
+      median_value = (input_array[first_position] + input_array[second_position])/2
+      return median_value
+
+      #  5 4 2 6 10 1 -- sorted input
+      #  1 2 4 5 6 10
+       # (4+5)/2. need postion 2 and position 3
+       #  length of array = 6. (6/2) & (6/2-1)
+
+    end
+  end
 
     # def variance_calc
     #     @numbers.each do |var|
-    #     (|var|-@mean)**2
+    #         (var-@mean)**2
+    #     end
+    #     return variance_calc
     # end
+
+    # @variance = variance_calc(@numbers)
+
 # # need to sum the def above and divide by the count
 # pine pg 88
 
     # @standard_deviation = "Replace this string with your answer."
 
     # @mode = "Replace this string with your answer."
+    # count occurences, sort by number and return value of top. tip: make a hash, loop through array with each and create a hash with key value pairs starting at 1. (each number encountered in array is bumped up by 1 again)
+    # create hash
+    # @numbers.each do |block_variable| end
+    # sorted on values. key is another column for a hash variable
+     in hash that was number itself and added value that started as 0.
 end
-end
+
+
+
