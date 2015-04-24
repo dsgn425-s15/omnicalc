@@ -10,11 +10,9 @@ class CalculationsController < ApplicationController
     # The special word the user input is in the string @special_word.
     # ================================================================================
 
-
     @character_count_with_spaces = @text.length
 
-    @character_count_without_spaces = @character_count_with_spaces - (@text.split(' ').length-1) - (@text.reverse.index(/[^ ]/)) - (@text.index(/[^ ]/))
-    # character count with spaces - spaces between words - spaces at end - spaces at beginning
+    @character_count_without_spaces = @character_count_with_spaces - @text.count(" ")
 
     @word_count = @text.split(' ').count
 
@@ -55,6 +53,8 @@ def time_between
     @hours = @minutes/60
     @days = @hours/24
     @weeks = @days/7
+    @months =@days/30
+    # months not showing
     @years = @days/365
 end
 
@@ -86,28 +86,47 @@ def descriptive_statistics
     @variance = variance_calc(@numbers)
 
     @standard_deviation = std_dev_calc(@numbers)
+
+    @mode = mode_calc(@numbers)
+
+
+
 end
 
-# # Median code
+
+# # mode_calc code
+
+def mode_calc(input_array)
+  count = Hash.new(0)
+  input_array.each do |number|
+    count[number] +=1
+  end
+  return count.sort_by { |k,v| v}.last.shift
+end
+  # shift drops the # of occurences from the return string
+
+
+# # median_calc code
 def median_array_of_numbers(input_array)
-    if input_array.length % 2 !=0
-      median_position = input_array.length / 2
-      return input_array[median_position]
-    else
+  if input_array.length % 2 !=0
+     median_position = input_array.length / 2
+  return input_array[median_position]
+  else
       first_position = input_array.length / 2
       second_position = (input_array.length / 2) - 1
       median_value = (input_array[first_position] + input_array[second_position])/2
-      return median_value
+  return median_value
 
       #  5 4 2 6 10 1 -- sorted input
       #  1 2 4 5 6 10
        # (4+5)/2. need postion 2 and position 3
        #  length of array = 6. (6/2) & (6/2-1)
 
-    end
+  end
 end
 
-# # Variance and std dev code
+
+# # variance_calc and std_dev_calc code
 
 def variance_calc(list_of_numbers)
    mean = @mean
@@ -120,21 +139,12 @@ def variance_calc(list_of_numbers)
   return running_total / list_of_numbers.length
 end
 
+
 def std_dev_calc(list_of_numbers)
   return Math.sqrt((variance_calc(list_of_numbers).to_f))
 end
 
-# # need to sum the def above and divide by the count
-# pine pg 88
-
-
-    # @mode = "Replace this string with your answer."
-    # count occurences, sort by number and return value of top. tip: make a hash, loop through array with each and create a hash with key value pairs starting at 1. (each number encountered in array is bumped up by 1 again)
-    # create hash
-    # @numbers.each do |block_variable| end
-    # sorted on values. key is another column for a hash variable
-     # in hash that was number itself and added value that started as 0.
- end
+end
 
 
 
