@@ -11,13 +11,20 @@ class CalculationsController < ApplicationController
     # ================================================================================
 
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_with_spaces = @text.length
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    split_text = @text.split(" ")
 
-    @word_count = "Replace this string with your answer."
+    split_text_chars = 0
+    for word in split_text
+      split_text_chars += word.length
+    end
 
-    @occurrences = "Replace this string with your answer."
+    @character_count_without_spaces = split_text_chars
+
+    @word_count = split_text.length
+
+    @occurrences = @text.split(@special_word).length - 1
   end
 
   def loan_payment
