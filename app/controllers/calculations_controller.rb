@@ -83,9 +83,13 @@ def descriptive_statistics
 
     @mean = @sum/@count
 
-  end
+    @variance = variance_calc(@numbers)
 
-  def median_array_of_numbers(input_array)
+    @standard_deviation = std_dev_calc(@numbers)
+end
+
+# # Median code
+def median_array_of_numbers(input_array)
     if input_array.length % 2 !=0
       median_position = input_array.length / 2
       return input_array[median_position]
@@ -101,29 +105,36 @@ def descriptive_statistics
        #  length of array = 6. (6/2) & (6/2-1)
 
     end
+end
+
+# # Variance and std dev code
+
+def variance_calc(list_of_numbers)
+   mean = @mean
+   running_total = 0
+   list_of_numbers.each do |number|
+      diff = mean - number
+      square = diff**2
+      running_total = running_total + square
   end
+  return running_total / list_of_numbers.length
+end
 
-    # def variance_calc
-    #     @numbers.each do |var|
-    #         (var-@mean)**2
-    #     end
-    #     return variance_calc
-    # end
-
-    # @variance = variance_calc(@numbers)
+def std_dev_calc(list_of_numbers)
+  return Math.sqrt((variance_calc(list_of_numbers).to_f))
+end
 
 # # need to sum the def above and divide by the count
 # pine pg 88
 
-    # @standard_deviation = "Replace this string with your answer."
 
     # @mode = "Replace this string with your answer."
     # count occurences, sort by number and return value of top. tip: make a hash, loop through array with each and create a hash with key value pairs starting at 1. (each number encountered in array is bumped up by 1 again)
     # create hash
     # @numbers.each do |block_variable| end
     # sorted on values. key is another column for a hash variable
-     in hash that was number itself and added value that started as 0.
-end
+     # in hash that was number itself and added value that started as 0.
+ end
 
 
 
