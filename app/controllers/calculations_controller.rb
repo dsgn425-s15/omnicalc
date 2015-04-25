@@ -11,13 +11,13 @@ class CalculationsController < ApplicationController
     # ================================================================================
 
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_with_spaces = @text.length
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @character_count_without_spaces =@text.gsub(' ','').length
 
-    @word_count = "Replace this string with your answer."
+    @word_count = @text.split(/[^-a-zA-Z]/).size
 
-    @occurrences = "Replace this string with your answer."
+    @occurrences = @special_word.count('@text')
   end
 
   def loan_payment
@@ -31,8 +31,8 @@ class CalculationsController < ApplicationController
     # The number of years the user input is in the integer @years.
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
-
-    @monthly_payment = "Replace this string with your answer."
+    def pmt (@apr/12, @years*12, @principal)
+    @monthly_payment = pmt.round(2)
   end
 
   def time_between
