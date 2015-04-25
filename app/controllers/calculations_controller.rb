@@ -87,9 +87,12 @@ end
 
     count_check = @count.odd?
 
-    if count_check = true
-      median = @sorted_numbers [(@count+1)/2]
-    else median = (@sorted_numbers [@count/2].to_f + @sorted_numbers[(@count/2)+1].to_f)/2
+    if count_check == true
+      median = @sorted_numbers [(@count+1)/2 - 1].to_i
+    else
+        left = (@count/2) - 1
+        right = left + 1
+        median = ((@sorted_numbers [left] + @sorted_numbers[right])/2).to_f
     end
 
     @median = median
