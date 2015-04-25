@@ -10,14 +10,32 @@ class CalculationsController < ApplicationController
     # The special word the user input is in the string @special_word.
     # ================================================================================
 
+    temparray = @text.split(" ")
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @word_count = temparray.length
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    #@character_count_with_spaces = "Replace this string with your answer."
 
-    @word_count = "Replace this string with your answer."
+    @character_count_with_spaces = @text.length
 
-    @occurrences = "Replace this string with your answer."
+    running_total = 0
+        temparray.each do |word|
+        temp = word.length
+        running_total=running_total + temp
+    end
+    @character_count_without_spaces = running_total
+
+    #@occurrences = "Replace this string with your answer."
+
+    running_match = 0
+        temparray.each do |word|
+        if word.downcase == @special_word.downcase
+            running_match = running_match + 1
+        end
+    end
+    @occurrences = running_match
+
+
   end
 
   def loan_payment
