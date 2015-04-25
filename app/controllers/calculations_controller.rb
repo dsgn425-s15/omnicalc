@@ -81,15 +81,22 @@ end
 
     @minimum = @sorted_numbers[0]
 
-    @maximum = "Replace this string with your answer."
+    @maximum = @sorted_numbers [@count-1]
 
-    @range = "Replace this string with your answer."
+    @range = @maximum - @minimum
 
-    @median = "Replace this string with your answer."
+    count_check = @count.odd?
+
+    if count_check = true
+      median = @sorted_numbers [(@count+1)/2]
+    else median = (@sorted_numbers [@count/2].to_f + @sorted_numbers[(@count/2)+1].to_f)/2
+    end
+
+    @median = median
 
     @sum = "Replace this string with your answer."
 
-    @mean = "Replace this string with your answer."
+    @mean = "@sum/@count"
 
     @variance = "Replace this string with your answer."
 
