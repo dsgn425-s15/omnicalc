@@ -50,8 +50,15 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    apr=@apr/100
+    numerator = apr*@principal
+    denominator = 1-(1+apr)**(-1*@years)
+    #(1-(1+@apr)**(-1*@years)
+
+    @monthly_payment = numerator/denominator
+
   end
+
 
   def time_between
     @starting = Chronic.parse(params[:starting_time])
