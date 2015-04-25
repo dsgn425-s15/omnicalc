@@ -31,9 +31,12 @@ class CalculationsController < ApplicationController
     # The number of years the user input is in the integer @years.
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
-    def pmt (@apr/12, @years*12, @principal)
-    @monthly_payment = pmt.round(2)
-  end
+    @r=@apr/1200
+    @n=@r*@principal
+    @nper=@years*12
+    @d=1-(1+@r)**-@nper
+    @monthly_payment = @n/@d.to_f
+   end
 
   def time_between
     @starting = Chronic.parse(params[:starting_time])
