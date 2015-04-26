@@ -15,8 +15,9 @@ class CalculationsController < ApplicationController
 
 # Missing sum of array
     # @newchararray = @text.split.map(&:length).join ' '
+    # .inject(:+)
 
-    @character_count_without_spaces = @text.split.map(&:length).join ' '.inject(:+)
+    @character_count_without_spaces = @text.split.map(&:length).join ' '
 
     @word_count = @text.split(/[^-a-zA-Z]/).size
 
