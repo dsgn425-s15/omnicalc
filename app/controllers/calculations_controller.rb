@@ -41,14 +41,16 @@ class CalculationsController < ApplicationController
     # ================================================================================
     p=@principal
     #n=months
-    n=@years/12
+    n=@years*12
     #apr in monthly terms
-    r=@apr/100/12
+    r=(@apr/100)/12
 
 #PMT = (P*r)/(1-(1+r)^-N)
-    pmt= (p*r)/(1-(1+r)^-n)
+    pmt = 0.0
+    pmt = (p*r)/(1-((1+r)**(-n)))
 
     @monthly_payment = pmt
+
   end
 
   def time_between
@@ -83,27 +85,52 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    num_array=@numbers.split
+    sorted=@numbers.sort
+    len=@numbers.size
+    min=sorted.first
+    max=sorted.last
+    range=max-min
+    median= (sorted[(len-1)/2] + sorted[(len/2)])/2.0
 
-    @sorted_numbers = @numbers.sort
 
-    @count = "Replace this string with your answer."
+    #sum with iteration
+    sum=0.0
+    @numbers.each do |num|
+        sum=sum+num
+    end
 
-    @minimum = "Replace this string with your answer."
+    #mean
+    mean=sum/len
 
-    @maximum = "Replace this string with your answer."
+    #Variance
+    #start with sum of squares
+    ss=0.0
+    @numbers.each do |num|
+        ss=ss+(mean-num)**2
+    end
+    variance=ss/len
+    stdev=variance**0.5
 
-    @range = "Replace this string with your answer."
 
-    @median = "Replace this string with your answer."
+    @sorted_numbers = sorted
 
-    @sum = "Replace this string with your answer."
+    @count = len
 
-    @mean = "Replace this string with your answer."
+    @minimum = min
 
-    @variance = "Replace this string with your answer."
+    @maximum = max
 
-    @standard_deviation = "Replace this string with your answer."
+    @range = range
+
+    @median = median
+
+    @sum = sum
+
+    @mean = mean
+
+    @variance = variance
+
+    @standard_deviation = stdev
 
     @mode = "Replace this string with your answer."
   end
