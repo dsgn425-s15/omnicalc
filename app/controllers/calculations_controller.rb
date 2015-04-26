@@ -37,7 +37,7 @@ def loan_payment
     p = @principal
     n = @years*12
 
-   @monthly_payment = (p*r)/(1-(1+r)**-(n))
+    @monthly_payment = (p*r)/(1-(1+r)**-(n))
 
 end
 
@@ -80,17 +80,21 @@ def descriptive_statistics
 
     @range = @maximum-@minimum
 
-    @median = @sorted_numbers[(@count - 1) / 2] + @sorted_numbers[@count / 2] / 2.0
 
-    @sum = @numbers.sum
-
-    @mean = @sum/@count
-
-    @variance = @numbers.inject(0) {|s,x| s + (x - @mean)**2}
-
-    @standard_deviation = (@variance)**0.5
-
-    freq = @numbers.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
-    @mode = @numbers.max_by { |v| freq[v] }
+    if @count %2 !=0
+        @median = @sorted_numbers[(@count)/2]
+    else
+        @median = (@sorted_numbers[(@count - 1)/2] + @sorted_numbers[@count/ 2]) / 2.0
 end
+        @sum = @numbers.sum
+
+        @mean = @sum/@count
+
+        @variance = (@numbers.inject(0) {|s,x| s + (x - @mean)**2})/@count
+
+        @standard_deviation = (@variance)**0.5
+
+        freq = @numbers.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
+        @mode = @numbers.max_by { |v| freq[v] }
+    end
 end
