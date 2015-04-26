@@ -10,13 +10,22 @@ class CalculationsController < ApplicationController
     # The special word the user input is in the string @special_word.
     # ================================================================================
 
+    #count occurences of special word by splitting string into an array and then checking every word to see if it's equal to special_word
+    count=0
+    @text.split.each do |word|
+        if word==@special_word
+        count=count+1
+        end
+    end
+
+
     @character_count_with_spaces = @text.length
 
     @character_count_without_spaces = @text.length - @text.count(' ')
 
     @word_count = @text.split.size
 
-    @occurrences = @text.scan(/@special_word/) { |match|  }
+    @occurrences = count
   end
 
   def loan_payment
@@ -55,6 +64,8 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
+    #Note, years does not account for leap years..
+
     @seconds = @ending-@starting
     @minutes = @seconds/60
     @hours = @minutes/60
@@ -72,7 +83,9 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    num_array=@numbers.split
+
+    @sorted_numbers = @numbers.sort
 
     @count = "Replace this string with your answer."
 
