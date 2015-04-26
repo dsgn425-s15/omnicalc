@@ -10,14 +10,13 @@ class CalculationsController < ApplicationController
     # The special word the user input is in the string @special_word.
     # ================================================================================
 
+    @character_count_with_spaces = @text.length
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_without_spaces = @text.length - @text.count(' ')
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @word_count = @text.split.size
 
-    @word_count = "Replace this string with your answer."
-
-    @occurrences = "Replace this string with your answer."
+    @occurrences = @text.scan(/@special_word/) { |match|  }
   end
 
   def loan_payment
@@ -31,8 +30,16 @@ class CalculationsController < ApplicationController
     # The number of years the user input is in the integer @years.
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
+    p=@principal
+    #n=months
+    n=@years/12
+    #apr in monthly terms
+    r=@apr/100/12
 
-    @monthly_payment = "Replace this string with your answer."
+#PMT = (P*r)/(1-(1+r)^-N)
+    pmt= (p*r)/(1-(1+r)^-n)
+
+    @monthly_payment = pmt
   end
 
   def time_between
@@ -48,12 +55,13 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = @ending-@starting
+    @minutes = @seconds/60
+    @hours = @minutes/60
+    @days = @hours/24
+    @weeks = @days/7
+    @years = @days/365
+
   end
 
   def descriptive_statistics
