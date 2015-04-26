@@ -55,17 +55,17 @@ class CalculationsController < ApplicationController
     # ================================================================================
 
     @seconds = (@ending - @starting).to_f
-    #"Replace this string with your answer."
+
     @minutes = @seconds/60
-    #"Replace this string with your answer."
+
     @hours = @minutes/60
-    #"Replace this string with your answer."
+
     @days = @hours/(24)
-    #"Replace this string with your answer."
+
     @weeks = @days/7
-    #"Replace this string with your answer."
+
     @years = @weeks/52
-    #"Replace this string with your answer."
+
   end
 
   def descriptive_statistics
@@ -77,27 +77,34 @@ class CalculationsController < ApplicationController
     # ================================================================================
 
     @sorted_numbers = @numbers.sort
-    #"Replace this string with your answer."
 
-    @count = @numbers.coun
-    #"Replace this string with your answer."
+    @count = @numbers.count
 
-    @minimum = "Replace this string with your answer."
+    @minimum = @numbers.min
 
-    @maximum = "Replace this string with your answer."
+    @maximum = @numbers.max
 
-    @range = "Replace this string with your answer."
+    @range = @maximum - @minimum
 
-    @median = "Replace this string with your answer."
 
-    @sum = "Replace this string with your answer."
+    @median = (@sorted_numbers[(@count-1)/2] + @sorted_numbers[@count/2])/2
 
-    @mean = "Replace this string with your answer."
 
-    @variance = "Replace this string with your answer."
+    @sum = @numbers.inject{|sum,x| sum + x}
 
-    @standard_deviation = "Replace this string with your answer."
 
-    @mode = "Replace this string with your answer."
+    @mean = @sum/@count
+
+
+    @variance = @numbers.inject(0){|sum,x| sum + (x-@mean)**2}
+
+
+    @standard_deviation = Math.sqrt(@variance)
+
+    mode_temp = @numbers.inject({}){|k,v| k[v]=@numbers.count(v); k}
+
+    @mode = mode_temp.select {|k,v| v == mode_temp.values.max}.keys
+
+
   end
 end
