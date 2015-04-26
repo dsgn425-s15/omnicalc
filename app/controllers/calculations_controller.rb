@@ -97,13 +97,45 @@ end
 
     @median = median
 
-    @sum = "Replace this string with your answer."
+    def sum(list_of_numbers)
+        running_total = 0
+        list_of_numbers.each do |number|
+        running_total = running_total + number
+    end
 
-    @mean = "@sum/@count"
+    return running_total
+end
 
-    @variance = "Replace this string with your answer."
+    @sum = sum(@sorted_numbers)
 
-    @standard_deviation = "Replace this string with your answer."
+
+
+    @mean = @sum/@count.to_f
+
+#create an array with the difference between each number and the mean, squared; then sum the array to get average.
+
+
+def variance(list_of_numbers)
+
+        difference = []
+        list_of_numbers.each do |number|
+        difference_sq = (number - @mean)**2
+        difference.push difference_sq
+    end
+
+        running_total = 0
+        difference.each do |num|
+        running_total = running_total + num
+
+    end
+
+    return running_total/@count
+end
+
+
+    @variance = variance(@sorted_numbers)
+
+    @standard_deviation = @variance**(1/2)
 
     @mode = "Replace this string with your answer."
   end
