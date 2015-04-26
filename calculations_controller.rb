@@ -13,12 +13,11 @@ class CalculationsController < ApplicationController
 
     @character_count_with_spaces = @text.length
 
-    @character_count_without_spaces =@text.gsub(' ','').length
+    @character_count_without_spaces = @text.length - @text.count(" ")
 
-    @word_count = @text.split(/[^-a-zA-Z]/).size
+    @word_count = @text.split.size
 
     @occurrences = @text.scan(/\b#{@special_word}\b/).length
-
   end
 
   def loan_payment
@@ -32,12 +31,9 @@ class CalculationsController < ApplicationController
     # The number of years the user input is in the integer @years.
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
-    @r=@apr/1200
-    @n=@r*@principal
-    @nper=@years*12
-    @d=1-(1+@r)**-@nper
-    @monthly_payment = @n/@d.to_f
-   end
+
+    @monthly_payment = @principal * ( (@apr / 100 / 12) * (1 + @apr / 100 / 12) ** (@years * 12) ) / ( (1 + @apr / 100 / 12) ** (@years * 12) - 1)
+  end
 
   def time_between
     @starting = Chronic.parse(params[:starting_time])
@@ -53,12 +49,11 @@ class CalculationsController < ApplicationController
     # ================================================================================
 
     @seconds = @ending - @starting
-    @minutes = @seconds/60
-    @hours = @minutes/60
-    @days = @hours/24
-    @weeks = @days/7
-    @months = @days/30
-    @years = @days/365.25
+    @minutes = @seconds / 60
+    @hours = @minutes / 60
+    @days = @hours / 24
+    @weeks = @days / 7
+    @years = @days / 365.25
   end
 
   def descriptive_statistics
@@ -69,30 +64,28 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = @numbers.sort_by(&:to_i)
+    @sorted_numbers = @numbers.sort
 
-    @count = @numbers.length
+    @count = @numbers.count
 
-    @minimum = @numbers.min
+    @minimum = @sorted_numbers[0]
 
-    @maximum = @numbers.max
+    @maximum = @sorted_numbers[-1]
 
     @range = @maximum - @minimum
 
-    @median = @count%2 == 1? @sorted_numbers[@count/2]:(@sorted_numbers[@count/2-1]+@sorted_numbers[@count/2]).to_f/2
+    @median = @count.even? ? (@sorted_numbers[@count / 2] + @sorted_numbers[@count / 2 + 1]) / 2.0 : @sorted_numbers[@count / 2 + 1]
 
-    @sum = @numbers.inject(0){|accum, i| accum + i }
+    @sum = @numbers.sum
 
-    @mean = @sum/@count.to_f
+    @mean = @sum / @count.to_f
 
-    @variance = (@numbers.inject(0){|accum,i| accum +(i-@mean)**2})/(@count).to_f
+    @variance = @numbers.inject(0){|accum, i | accum + (i - @mean) ** 2} / @count
 
-    @standard_deviation =Math.sqrt(@variance)
+    @standard_deviation = Math.sqrt(@variance)
 
     freqency = @numbers.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
 
     @mode = @numbers.max_by { |v| freqency[v] }
-
+  end
 end
-end
-
