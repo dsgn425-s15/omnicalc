@@ -84,7 +84,7 @@ p=@principal
 
     @mean = @sum/@count
 
-    @variance = @numbers.inject(0){|sum,x|sum + (x-@mean)**2}
+    @variance = (@numbers.inject(0){|sum,x|sum + (x-@mean)**2})/@count
 
     @standard_deviation = @variance**(0.5)
     mode_temp= @numbers.inject({}) { |k, v| k[v] = @numbers.count(v); k }
