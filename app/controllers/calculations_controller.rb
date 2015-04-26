@@ -17,7 +17,8 @@ class CalculationsController < ApplicationController
 
     @word_count = @text.split(/[^-a-zA-Z]/).size
 
-    @occurrences = @special_word.count('@text')
+    @occurrences = @text.scan(/#{@special_word}/).count
+
   end
 
   def loan_payment
@@ -51,12 +52,13 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = @ending - @starting
+    @minutes = @seconds/60
+    @hours = @minutes/60
+    @days = @hours/24
+    @weeks = @days/7
+    @months = @days/30
+    @years = @days/365
   end
 
   def descriptive_statistics
@@ -67,26 +69,44 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort_by(&:to_i)
 
-    @count = "Replace this string with your answer."
+    @count = @numbers.length
 
-    @minimum = "Replace this string with your answer."
+    @minimum = @numbers.min
 
-    @maximum = "Replace this string with your answer."
+    @maximum = @numbers.max
 
-    @range = "Replace this string with your answer."
+    @range = @maximum - @minimum
 
-    @median = "Replace this string with your answer."
+    @median = @count%2 == 1? @sorted_numbers[@count/2]:(@sorted_numbers[@count/2-1]+@sorted_numbers[@count/2]).to_f/2
 
-    @sum = "Replace this string with your answer."
+    @sum = @numbers.inject(0){|accum, i| accum + i }
 
-    @mean = "Replace this string with your answer."
+    @mean = @sum/@count.to_f
 
-    @variance = "Replace this string with your answer."
+    @variance = (@numbers.inject(0){|accum,i| accum +(i-@mean)**2})/(@count).to_f
 
-    @standard_deviation = "Replace this string with your answer."
+    @standard_deviation =Math.sqrt(@variance)
 
-    @mode = "Replace this string with your answer."
+def mode(i)
+  a = Array.new
+  b = Array.new
+  @sorted_numbers.each do |i|
+    if a.index(i)==nil
+      a << i # Add to list of values
+      b << 1 # Add to list of frequencies
+    else
+      b[a.index(i)] += 1 # Increment existing counter
+    end
   end
+  maxval = b.max           # Find highest count
+  where = b.index(maxval)  # Find index of highest count
+  a[where]                 # Find corresponding data value
 end
+
+   @mode = mode (@numbers)
+
+end
+end
+
