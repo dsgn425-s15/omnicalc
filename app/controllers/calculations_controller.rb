@@ -33,7 +33,12 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    i =@apr/12/100
+    n = @years*12
+    p = @principal
+
+    @monthly_payment = (i/(1-(1+i)**-n))*p
+
   end
 
   def time_between
@@ -49,12 +54,18 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = (@ending - @starting).to_f
+    #"Replace this string with your answer."
+    @minutes = @seconds/60
+    #"Replace this string with your answer."
+    @hours = @minutes/60
+    #"Replace this string with your answer."
+    @days = @hours/(24)
+    #"Replace this string with your answer."
+    @weeks = @days/7
+    #"Replace this string with your answer."
+    @years = @weeks/52
+    #"Replace this string with your answer."
   end
 
   def descriptive_statistics
@@ -65,9 +76,11 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort
+    #"Replace this string with your answer."
 
-    @count = "Replace this string with your answer."
+    @count = @numbers.coun
+    #"Replace this string with your answer."
 
     @minimum = "Replace this string with your answer."
 
