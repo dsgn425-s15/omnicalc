@@ -3,6 +3,8 @@ class CalculationsController < ApplicationController
   def word_count
     @text = params[:user_text]
     @special_word = params[:user_word]
+    @text_downcase = @text.downcase
+    @special_word_downcase = @special_word.downcase
 
     # ================================================================================
     # Your code goes below.
@@ -11,13 +13,13 @@ class CalculationsController < ApplicationController
     # ================================================================================
 
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_with_spaces = @text.length
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @character_count_without_spaces = @text.length - @text.count(' ')
 
-    @word_count = "Replace this string with your answer."
+    @word_count = @text.split(' ').length
 
-    @occurrences = "Replace this string with your answer."
+    @occurrences = @text_downcase.split(' ').count(@special_word_downcase)
   end
 
   def loan_payment
