@@ -11,13 +11,17 @@ class CalculationsController < ApplicationController
     # ================================================================================
 
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_with_spaces = @text.length 
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @character_count_without_spaces = @text.strip.length
 
-    @word_count = "Replace this string with your answer."
+    @word_count =  @text.split(' ').length
 
-    @occurrences = "Replace this string with your answer."
+
+
+    # @occurrences = @special_word.map {|str| str.count(@text) }
+    
+    # @occurrences = countOccurence(@text, @special_word)
   end
 
   def loan_payment
@@ -32,7 +36,11 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+
+
+    @monthly_payment = pmt(@apr, @years, @principal)
+
+
   end
 
   def time_between
@@ -48,12 +56,12 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = (@starting - @ending).seconds
+    @minutes = (@starting - @ending)/60.to_i
+    @hours = (@starting - @ending)/60/60.to_i
+    @days = (@starting - @ending)/60/60/24.to_i
+    @weeks = (@starting - @ending)/60/60/24/7.to_i
+    @years = (@starting - @ending)/60/60/24/7/52.to_i
   end
 
   def descriptive_statistics
@@ -64,26 +72,138 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort
 
-    @count = "Replace this string with your answer."
+    @count = @numbers.count
 
-    @minimum = "Replace this string with your answer."
+    @minimum = minimum(@numbers)
 
-    @maximum = "Replace this string with your answer."
+    @maximum = maxNum(@numbers)
 
-    @range = "Replace this string with your answer."
 
-    @median = "Replace this string with your answer."
+    @range = range(@numbers)
 
-    @sum = "Replace this string with your answer."
+    @median = median(@numbers)
 
-    @mean = "Replace this string with your answer."
+    @sum = sum(@numbers)
 
-    @variance = "Replace this string with your answer."
+    @mean = average(@numbers)
 
-    @standard_deviation = "Replace this string with your answer."
+    @variance = variance(@numbers)
 
-    @mode = "Replace this string with your answer."
+    @standard_deviation = sd(@numbers)
+
+    @mode = mode(@numbers)
   end
+
+
+    def pmt(rate, nper, pv)
+
+        dividedRate    = (rate /100/ 12) 
+        monthyPayments = nper * 12
+
+        # return (dividedRate * pv) / ( 1 - ((1 + dividedRate) ** - dividedRate))
+        return (dividedRate * pv) / (1 - (1 + dividedRate)** - monthyPayments)
+
+
+    end
+
+
+
+    def maxNum(list_of_numbers)
+        running_total = 0
+        list_of_numbers.each do |number|
+        if number > running_total
+        running_total = number
+        end 
+
+    end
+        return running_total
+    end
+
+
+    def minimum(list_of_numbers)
+        running_total = 0
+        list_of_numbers.each do |number|
+        if running_total == 0 
+            running_total = number 
+        elsif number < running_total
+        running_total = number
+        end 
+
+    end
+        return running_total
+    end
+
+  
+    def range(list_of_numbers)
+
+        highNum = maxNum(list_of_numbers)
+        lowNum  = minimum(list_of_numbers)
+
+        return highNum - lowNum
+    end
+
+
+    def median(array)
+      array.sort!
+      if array.length % 2 == 0
+        median_value = (array[array.length / 2] + array[array.length/2 - 1]) / 2.0
+      else
+        median_value = array[array.length / 2]
+      end
+    end
+
+    def sum(list_of_numbers)
+    running_total = 0
+    list_of_numbers.each do |number|
+    running_total = running_total + number
+    end
+    return running_total
+
 end
+
+
+    def average(list_of_numbers)
+
+        len = list_of_numbers.length
+        sum = sum(list_of_numbers)
+
+    return  sum / len 
+
+    end 
+
+    def variance(list_of_numbers)
+    running_total = 0
+    average       = average(list_of_numbers)
+
+    list_of_numbers.each do |number|
+    running_total = (number - average)**2 + running_total
+    end
+    return running_total
+
+end
+
+    def sd(list_of_numbers)
+
+        varianceVar = variance(list_of_numbers)
+   
+    return  varianceVar ** 0.5 
+
+    end 
+
+    def mode(mode)
+        mode_return = mode.inject({}) { |k, v| k[v] = mode.count(v); k }
+        return mode_return.select { |k,v| v == mode_return.values.max }.keys
+        
+    end
+
+    def countOccurence(text,special_word)
+
+    newArray = text.select { |a| a == special_word }     
+    return newArray.count
+
+    end 
+
+
+end 
