@@ -9,15 +9,15 @@ class CalculationsController < ApplicationController
     # The text the user input is in the string @text.
     # The special word the user input is in the string @special_word.
     # ================================================================================
+    
 
+    @character_count_with_spaces = @text.length
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_without_spaces = @text.length - @text.scan(' ').length 
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @word_count = @text.split.size
 
-    @word_count = "Replace this string with your answer."
-
-    @occurrences = "Replace this string with your answer."
+    @occurrences = @text.upcase.scan(@special_word.upcase).size
   end
 
   def loan_payment
