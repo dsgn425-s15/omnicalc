@@ -12,7 +12,7 @@ class CalculationsController < ApplicationController
     
 
     @character_count_with_spaces = @text.length
-    
+
     #Established the " ", first, then subtracted this # from the previous result
     space_count = @text.count " "
 
@@ -35,8 +35,11 @@ class CalculationsController < ApplicationController
     # The number of years the user input is in the integer @years.
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
+    @epr = @apr/1200.to_f
+    @periods = @years*12.to_i
 
-    @monthly_payment = "Replace this string with your answer."
+    @monthly_payment = (((1+@epr)**@periods)*@principal*@epr)/(((1+@epr)**@periods)-1)
+    
   end
 
   def time_between
@@ -52,12 +55,12 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = @ending - @starting
+    @minutes = @seconds/60
+    @hours = @minutes/60
+    @days = @hours/24
+    @weeks = @days/7
+    @years = @weeks/52
   end
 
   def descriptive_statistics
@@ -68,21 +71,27 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort
 
-    @count = "Replace this string with your answer."
+    @sum = @numbers.inject{|sum,x| sum+x}
 
-    @minimum = "Replace this string with your answer."
+    @count = @numbers.length
 
-    @maximum = "Replace this string with your answer."
+    @minimum = @numbers.min
 
-    @range = "Replace this string with your answer."
+    @maximum = @numbers.max
 
-    @median = "Replace this string with your answer."
+    @range = @numbers.max - @numbers.min
 
-    @sum = "Replace this string with your answer."
+    def median (numbers)
+        sorted_numbers = numbers.sort
+        length_of_array = numbers.length
+        return (sorted_numbers[length_of_array -1)/2] + sorted_numbers[length_of_array / 2]) / 2
+    end
 
-    @mean = "Replace this string with your answer."
+    @median = median(@numbers)
+
+    @mean = @sum / @count
 
     @variance = "Replace this string with your answer."
 
