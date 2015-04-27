@@ -115,15 +115,7 @@ class CalculationsController < ApplicationController
 
         @standard_deviation = @variance.to_f**0.5
 
-    @mode = "Replace this string with your answer."
-
-    #freq = @numbers.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
-    #@numbers.max_by { |v| freq[v] }
-
-    #@mode = @numbers.mode
-
-    #freq = arr.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
-    #arr.max_by { |v| freq[v] }
+    @mode = "I don't know how to calculate this!"
 
   end
 end
