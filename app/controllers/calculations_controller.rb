@@ -97,11 +97,46 @@ def descriptive_statistics
     @mean = @sum/@count
 
 
-#    @variance =
-#
-#    @standard_deviation =
-#
-#    @mode =
+    def variance
+        running_total = 0
+        @numbers.each do |array_value|
+            running_total = running_total+(@mean - array_value)**2
+        end
+
+        return answer = running_total/@count
+
+    end
+
+    @variance = variance
+
+    @standard_deviation = @variance**0.5
+
+# Thought process:
+# sort the array
+# go through each value in the array and check whether it equals the previous one
+# if it does, add 1 to counter
+# if it does not, push that value to a new array and reset counter to 0
+# get the max value from that array
+# go back throught the array and count the number of times each value exists
+# if the count of that array value equals the max, then return that value as the mode
+
+def mode
+    counter_array = []
+
+    @sorted_numbers.each do |xyz|
+        counter_array.push @sorted_numbers.count(xyz)
+    end
+
+    @sorted_numbers.each do |xyz|
+        if @sorted_numbers.count(xyz) == counter_array.max
+            return xyz
+        end
+
+    end
+
 end
 
+@mode = mode
+
+end
 end
