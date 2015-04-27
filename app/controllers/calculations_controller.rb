@@ -113,7 +113,7 @@ def descriptive_statistics
     @standard_deviation = Math.sqrt(@variance)
 
     #calculating mode - method #1: scanning the sorted array
-    current_number=
+    current_number=0
     current_number_count =0
     best_mode=0
     best_mode_count=0
@@ -121,15 +121,15 @@ def descriptive_statistics
         if new_num == current_number then
             #increment running total for this number
             current_number_count+=1
-            #check if we beat the old mode
-            if current_number_count >= best_mode_count then
-                best_mode = current_number
-                best_mode_count = current_number_count
-            end
         else
             #reset running total for this number
             current_number = new_num
             current_number_count = 1
+        end
+        #check if we beat the old mode
+        if current_number_count >= best_mode_count then
+            best_mode = current_number
+            best_mode_count = current_number_count
         end
     end
     @mode = best_mode
