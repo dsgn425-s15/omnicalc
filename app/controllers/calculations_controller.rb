@@ -11,16 +11,21 @@ class CalculationsController < ApplicationController
     # ================================================================================
 
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_with_spaces = @text.length
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @spaces = @text.count(" ")
 
-    @word_count = "Replace this string with your answer."
+    @no_spaces = @character_count_with_spaces - @spaces
 
-    @occurrences = "Replace this string with your answer."
-  end
+    @character_count_without_spaces = @no_spaces
 
-  def loan_payment
+    @word_count = @text.split.count
+
+    @occurrences = @text.count(@special_word)
+
+end
+
+def loan_payment
     @apr = params[:annual_percentage_rate].to_f
     @years = params[:number_of_years].to_i
     @principal = params[:principal_value].to_f
@@ -32,10 +37,13 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
-  end
+    @monthly_interest_rate = (@apr/100)/12
+    @total_payments = @years*12
 
-  def time_between
+    @monthly_payment =@principal*(@monthly_interest_rate/(1-(1+@monthly_interest_rate)**(-@total_payments)))
+end
+
+def time_between
     @starting = Chronic.parse(params[:starting_time])
     @ending = Chronic.parse(params[:ending_time])
 
@@ -48,15 +56,15 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
-  end
+    @seconds = (@ending-@starting).to_i
+    @minutes = @seconds/60
+    @hours = @minutes/60
+    @days = @hours/24
+    @weeks = (@days/7).to_f
+    @years = @weeks/52
+end
 
-  def descriptive_statistics
+def descriptive_statistics
     @numbers = params[:list_of_numbers].gsub(',', '').split.map(&:to_f)
 
     # ================================================================================
@@ -64,26 +72,36 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort
 
-    @count = "Replace this string with your answer."
+    @count = @numbers.count
 
-    @minimum = "Replace this string with your answer."
+    @minimum = @numbers.min
 
-    @maximum = "Replace this string with your answer."
+    @maximum = @numbers.max
 
-    @range = "Replace this string with your answer."
+    @range = @maximum-@minimum
 
-    @median = "Replace this string with your answer."
+    if @count.even?
 
-    @sum = "Replace this string with your answer."
+        @median = ((@sorted_numbers[@count/2]+@sorted_numbers[@count/2-1])/2)
 
-    @mean = "Replace this string with your answer."
+    else
 
-    @variance = "Replace this string with your answer."
+        @median = @sorted_numbers[(@count/2).round]
 
-    @standard_deviation = "Replace this string with your answer."
+    end
 
-    @mode = "Replace this string with your answer."
-  end
+    @sum = @numbers.sum
+
+    @mean = @sum/@count
+
+
+#    @variance =
+#
+#    @standard_deviation =
+#
+#    @mode =
+end
+
 end
