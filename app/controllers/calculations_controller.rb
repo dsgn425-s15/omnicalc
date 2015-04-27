@@ -13,7 +13,7 @@ class CalculationsController < ApplicationController
 
     @character_count_with_spaces = @text.length
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @character_count_without_spaces = @text.count("a-z") #@text.length - @text.scan(/\b/).size
 
     @word_count = @text.scan(/\b/).size/2
 
@@ -68,26 +68,51 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort
 
-    @count = "Replace this string with your answer."
+    @count = @numbers.count
 
-    @minimum = "Replace this string with your answer."
+    @minimum = @numbers.min
 
-    @maximum = "Replace this string with your answer."
+    @maximum = @numbers.max
 
-    @range = "Replace this string with your answer."
+    @range = @numbers.max - @numbers.min
 
-    @median = "Replace this string with your answer."
+    mid = @numbers.length / 2
+    sorted = @numbers.sort
+    @median = @numbers.length.odd? ? sorted[mid] : 0.5 * (sorted[mid] + sorted[mid - 1])
 
-    @sum = "Replace this string with your answer."
+    @sum = (@numbers.inject{ |sum, el| sum + el }.to_f).round(2)
 
-    @mean = "Replace this string with your answer."
+    @mean = (@numbers.inject{ |sum, el| sum + el }.to_f / @numbers.size).round(2)
 
-    @variance = "Replace this string with your answer."
+    @variance = @numbers.sample_variance.round(2) #@numbers.inject {|sum, el| sum + (el - @mean)**2}
 
-    @standard_deviation = "Replace this string with your answer."
+    @standard_deviation = @numbers.standard_deviation.round(2) #Math.sqrt(@variance).round(2)
 
-    @mode = "Replace this string with your answer."
+    freq = @numbers.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
+    @mode = (@numbers.max_by { |v| freq[v] })
   end
+end
+
+module Enumerable
+
+    def sum
+      self.inject(0){|accum, i| accum + i }
+    end
+
+    def mean
+      self.sum/self.length.to_f
+    end
+
+    def sample_variance
+      m = self.mean
+      sum = self.inject(0){|accum, i| accum +(i-m)**2 }
+      sum/(self.length - 1).to_f
+    end
+
+    def standard_deviation
+      return Math.sqrt(self.sample_variance)
+    end
+
 end
