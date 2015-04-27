@@ -11,13 +11,13 @@ class CalculationsController < ApplicationController
     # ================================================================================
 
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_with_spaces = @text.length
 
     @character_count_without_spaces = "Replace this string with your answer."
 
-    @word_count = "Replace this string with your answer."
+    @word_count = @text.scan(/\b/).size/2
 
-    @occurrences = "Replace this string with your answer."
+    @occurrences = @text.scan(@special_word).count
   end
 
   def loan_payment
@@ -32,7 +32,11 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    r = @apr / 1200
+    n = @principal * r
+    d = 1 - (1 + r)**-(@years * 12)
+
+    @monthly_payment =n / d
   end
 
   def time_between
@@ -48,12 +52,12 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = (@ending - @starting).to_i
+    @minutes = ((@ending - @starting) / (60)).to_i
+    @hours = ((@ending - @starting) / (60 * 60)).to_i
+    @days = ((@ending - @starting) / (60 * 60 * 24)).to_i
+    @weeks = ((@ending - @starting) / (60 * 60 * 24 * 7)).round(2)
+    @years = ((@ending - @starting) / (60 * 60 * 24 * 365)).round(2)
   end
 
   def descriptive_statistics
