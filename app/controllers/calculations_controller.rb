@@ -111,6 +111,24 @@ class CalculationsController < ApplicationController
 
     @standard_deviation = @variance**0.5
 
-    @mode = "Replace this string with your answer."
+    # the method below should allow for multiple modes but I can't quite get it to work
+    #
+    # freq = Hash.new(0)
+    # @numbers.each do |number|
+    #     freq[number] += 1
+    # end
+    # mode_array = []
+    # freq.each do |freq, number|
+    #     if number == freq.values.max
+    #         mode_array << number
+    #     end
+    # end
+    # mode_array.sort
+
+    freq_array = @numbers
+    freq = freq_array.inject(Hash.new(0)) {|h,v| h[v] +=1; h}
+    mode = freq_array.max_by {|v| freq[v]}
+
+    @mode = mode
   end
 end
