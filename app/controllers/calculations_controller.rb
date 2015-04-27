@@ -58,6 +58,24 @@ class CalculationsController < ApplicationController
     @years = @weeks/52
   end
 
+    def median(list_of_numbers)
+        sorted=list_of_numbers.sort
+        length=sorted.length
+        return (sorted[(length-1)/2] + sorted[length/2])/2.0
+    end
+
+    def variance(list_of_numbers)
+        running_total = 0
+        list_of_numbers.each do |array_value|
+            running_total = running_total + (@mean - array_value)**2
+        end
+        return answer = running_total/@count
+    end
+
+    def mode(list_of_numbers)
+        list_of_numbers.mode
+    end
+
   def descriptive_statistics
     @numbers = params[:list_of_numbers].gsub(',', '').split.map(&:to_f)
 
@@ -66,36 +84,27 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort
 
-    @count = "Replace this string with your answer."
+    @count = @numbers.count
 
-    @minimum = "Replace this string with your answer."
+    @minimum = @numbers.min
 
-    @maximum = "Replace this string with your answer."
+    @maximum = @numbers.max
 
-    @range = "Replace this string with your answer."
+    @range = @numbers.max - @numbers.min
 
-    @median = "Replace this string with your answer."
+    @median = median(@numbers)
+       
+    @sum = @numbers.inject{|sum,x| sum + x }
+    
+    @mean = @sum/@count
 
-    def sum
-        @sum=0
-        @sum = @numbers.inject{|sum,x| sum + x }
-    end
+    @variance = variance(@numbers)
 
-    @mean = "Replace this string with your answer."
+    @standard_deviation = Math.sqrt(@variance)
 
-    def variance
-        running_total = 0
-        @numbers.each do |array_value|
-            running_total = running_total + (@mean - array_value)**2
-        end
-        return answer = running_total/@count
-    end
-    @variance = variance
-
-    @standard_deviation = "Replace this string with your answer."
-
-    @mode = "Replace this string with your answer."
+    @mode = @numbers.max_by{|x| @numbers.count(x) }
+  
   end
 end
