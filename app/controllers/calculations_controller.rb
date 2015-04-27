@@ -24,6 +24,8 @@ class CalculationsController < ApplicationController
     @apr = params[:annual_percentage_rate].to_f
     @years = params[:number_of_years].to_i
     @principal = params[:principal_value].to_f
+    @mpr = @apr/1200.to_f
+    @period = @years*12.to_i
 
     # ================================================================================
     # Your code goes below.
@@ -32,7 +34,7 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    @monthly_payment = (((1+@mpr)**@period)*@principal*@mpr)/(((1+@mpr)**@period)-1)
   end
 
   def time_between
