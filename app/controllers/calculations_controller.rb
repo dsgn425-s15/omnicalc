@@ -24,6 +24,9 @@ class CalculationsController < ApplicationController
 
     @word_count = split_text.length
 
+    if @special_word == ""
+      @occurrences = "No special word entered"
+    end
     @occurrences = @text.split(@special_word).length - 1
   end
 
@@ -33,13 +36,13 @@ class CalculationsController < ApplicationController
     @principal = params[:principal_value].to_f
 
     # ================================================================================
-    # Your code goes below.
     # The annual percentage rate the user input is in the decimal @apr.
     # The number of years the user input is in the integer @years.
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    # What is the monthly payment over (12 * @years) months that results in the same PV? Annuity formula
+    @monthly_payment = (@principal*(@apr/12)*((1+@apr/12)**(12*@years)))/((1+@apr/12)**(12*@years)-1)
   end
 
   def time_between
