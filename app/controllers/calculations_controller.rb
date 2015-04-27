@@ -135,8 +135,25 @@ end
 
     @variance = variance(@sorted_numbers)
 
-    @standard_deviation = @variance**(1/2)
+    @standard_deviation = @variance**(0.5).to_f
 
-    @mode = "Replace this string with your answer."
+def mode(list_of_numbers)
+
+        list_of_numbers.each do |check|
+        count_"#{check}"=list_of_numbers.count(check)
+        number_"#{check}" = {:number => check, :count =>count_"#{check}"}}
+    end
+
+        running_total = 0
+        difference.each do |num|
+        running_total = running_total + num
+
+    end
+
+    return running_total/@count
+end
+
+    @mode =
+
   end
 end
