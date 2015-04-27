@@ -17,7 +17,9 @@ class CalculationsController < ApplicationController
     # @newchararray = @text.split.map(&:length).join ' '
     # .inject(:+)
 
-    @character_count_without_spaces = @text.split.map(&:length).join ' '
+    # @character_count_without_spaces = @text.split.map(&:length).join ' '
+
+    @character_count_without_spaces = @text.gsub(/\s+/, "").length
 
     @word_count = @text.split(/[^-a-zA-Z]/).size
 
