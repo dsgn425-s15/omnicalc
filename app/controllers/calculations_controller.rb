@@ -96,6 +96,8 @@ class CalculationsController < ApplicationController
 
     @standard_deviation = Math.sqrt(@variance)
 
-    @mode = "Replace this string with your answer."
+    @freq = @numbers.inject(Hash.new(0)){|h,v| h[v]+=1;h}
+
+    @mode = @numbers.max_by{|v| @freq[v]}
   end
 end
