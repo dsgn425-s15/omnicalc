@@ -12,15 +12,18 @@ class CalculationsController < ApplicationController
 
     @word_count = @text.split.count
 
+    special_count = 0
+    text_array = @text.split
+    text_array.each do |word|
+        if word.downcase == @special_word.downcase
+          special_count += 1
+        end
+    end
 
-    # special_count = 0
-    # text_array = @text.split
-    # text_array.each do |word|
-    #     if word == @special_word
-    #     special_count += 1
-    # end
+    # @text.scan(/\w+/).count(@special_word)
+    # works but doesn't handle different capitalization
 
-    @occurrences = @text.scan(/\w+/).count(@special_word)
+    @occurrences = special_count
   end
 
   def loan_payment
@@ -77,19 +80,36 @@ class CalculationsController < ApplicationController
 
     @minimum = @sorted_numbers[0]
 
-    @maximum = @sorted_numbers[@count-1]
+    @maximum = @sorted_numbers.last
 
     @range = @maximum-@minimum
 
-    @median = "Replace this string with your answer."
+    median = 0
+    if @count%2 == 0
+        median = ((@sorted_numbers[@count/2]+@sorted_numbers[(@count/2)-1])/2)
+    else
+        median = (@sorted_numbers[@count/2])
+    end
 
-    @sum = "Replace this string with your answer."
+    @median = median
 
-    @mean = "Replace this string with your answer."
+    sum = 0
+    @numbers.each do |number|
+        sum = sum + number
+    end
 
-    @variance = "Replace this string with your answer."
+    @sum = sum
 
-    @standard_deviation = "Replace this string with your answer."
+    @mean = @sum/@count.to_f
+
+    resid_sq = 0
+    @numbers.each do |number|
+        resid_sq = resid_sq + (number - @mean)**2
+    end
+
+    @variance = resid_sq/@count.to_f
+
+    @standard_deviation = @variance**0.5
 
     @mode = "Replace this string with your answer."
   end
