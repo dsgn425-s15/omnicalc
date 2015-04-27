@@ -89,9 +89,15 @@ class CalculationsController < ApplicationController
 
     @standard_deviation =Math.sqrt(@variance)
 
-    freqency = @numbers.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
+    #freqency = @numbers.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
 
-    @mode = @numbers.max_by { |v| freqency[v] }
+    #@mode = @numbers.max_by { |v| freqency[v] }
+
+    hash = {}
+    @numbers.each do |number|
+        hash[number] == nil ? hash[number] = 1 : hash[number] += 1
+    end
+    @mode = @numbers.max_by { |i| hash[i] }
 
 end
 end
