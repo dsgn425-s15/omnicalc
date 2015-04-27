@@ -50,12 +50,12 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = @ending - @starting
+    @minutes = @seconds/60
+    @hours = @minutes/60
+    @days = @hours/24
+    @weeks = @days/7
+    @years = @weeks/52
   end
 
   def descriptive_statistics
@@ -78,11 +78,21 @@ class CalculationsController < ApplicationController
 
     @median = "Replace this string with your answer."
 
-    @sum = "Replace this string with your answer."
+    def sum
+        @sum=0
+        @sum = @numbers.inject{|sum,x| sum + x }
+    end
 
     @mean = "Replace this string with your answer."
 
-    @variance = "Replace this string with your answer."
+    def variance
+        running_total = 0
+        @numbers.each do |array_value|
+            running_total = running_total + (@mean - array_value)**2
+        end
+        return answer = running_total/@count
+    end
+    @variance = variance
 
     @standard_deviation = "Replace this string with your answer."
 
