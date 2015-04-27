@@ -26,15 +26,22 @@ class CalculationsController < ApplicationController
     @apr = params[:annual_percentage_rate].to_f
     @years = params[:number_of_years].to_i
     @principal = params[:principal_value].to_f
+    @mpr = @apr / 1200
+    @period = @years * 12
+
 
     # ================================================================================
     # Your code goes below.
     # The annual percentage rate the user input is in the decimal @apr.
     # The number of years the user input is in the integer @years.
     # The principal value the user input is in the decimal @principal.
+    # P = L[c(1 + c)^n]/[(1 + c)^n - 1]. P is the payment, while L is the loan value;
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    #@monthly_payment = (@principal*@mpr)/(1-(1/((1+@mpr)**@period)))
+
+    @monthly_payment = (@principal*@mpr*((1+@mpr)**@period))/(((1+@mpr)**@period)-1)
+
   end
 
   def time_between
