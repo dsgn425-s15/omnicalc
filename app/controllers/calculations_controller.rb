@@ -38,11 +38,10 @@ class CalculationsController < ApplicationController
     # P = L[c(1 + c)^n]/[(1 + c)^n - 1]. P is the payment, while L is the loan value;
     # ================================================================================
 
-    #@monthly_payment = (@principal*@mpr)/(1-(1/((1+@mpr)**@period)))
 
     @monthly_payment = (@principal*@mpr*((1+@mpr)**@period))/(((1+@mpr)**@period)-1)
-
   end
+
 
   def time_between
     @starting = Chronic.parse(params[:starting_time])
@@ -57,12 +56,12 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = @ending - @starting
+    @minutes = (@ending - @starting)/60
+    @hours = (@ending - @starting)/(60*60)
+    @days = (@ending - @starting)/(24*60*60)
+    @weeks = (@ending - @starting)*1.64890918315576E-06
+    @years = (@ending - @starting)*3.17969067969068E-08
   end
 
   def descriptive_statistics
