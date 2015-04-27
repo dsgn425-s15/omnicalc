@@ -111,6 +111,21 @@ class CalculationsController < ApplicationController
     variance=ss/len
     stdev=variance**0.5
 
+    #IDEA FOR MODE
+    # Get Unique elements of number array
+    # Loop Unique array and count number of instances of each unique in the full array
+    # Enter the count and the unique number into the sub array or a larger array
+    #when loop is done, sort the larger array, then take the last sub array, second element.
+
+    unique=@numbers.uniq
+    container=[]
+    unique.each do |unq|
+        instances=sorted.select{|num| num==unq}
+        count=instances.count
+        container.push([count,unq])
+    end
+
+    mode=container.sort.last[1]
 
     @sorted_numbers = sorted
 
@@ -132,6 +147,7 @@ class CalculationsController < ApplicationController
 
     @standard_deviation = stdev
 
-    @mode = "Replace this string with your answer."
+    @mode = mode
+
   end
 end
