@@ -116,7 +116,12 @@ end
 
     @standard_deviation = (variance(@numbers))**0.5
 
-    @mode = "I tried for a while, but I could not calculate it"
+
+    @freq = @sorted_numbers.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
+
+    @mode = @sorted_numbers.max_by { |v| @freq[v] }
+
+
     end
     end
 
