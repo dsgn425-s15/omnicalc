@@ -5,37 +5,45 @@ class CalculationsController < ApplicationController
     @special_word = params[:user_word]
 
     # ================================================================================
-    # Your code goes below.
     # The text the user input is in the string @text.
     # The special word the user input is in the string @special_word.
     # ================================================================================
 
+    @character_count_with_spaces = @text.length
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_without_spaces = @text.length - @text.count(' ')
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @word_count=0
+    @occurrences=0
+    @text.split(' ').each do |word| #loop through each word
+        if word.length > 0 then
+            @word_count+=1
+            if word.upcase==@special_word.upcase then
+                @occurrences+=1
+            end
+        end
+    end
+end
 
-    @word_count = "Replace this string with your answer."
-
-    @occurrences = "Replace this string with your answer."
-  end
-
-  def loan_payment
+def loan_payment
     @apr = params[:annual_percentage_rate].to_f
     @years = params[:number_of_years].to_i
     @principal = params[:principal_value].to_f
 
     # ================================================================================
-    # Your code goes below.
     # The annual percentage rate the user input is in the decimal @apr.
     # The number of years the user input is in the integer @years.
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
+    rate = @apr/100.0/12.0  #covert apr (as percent) to monthly interest rate (as decimal)
+    nper = @years*12.0 #number of monthly payments
+    pv = @principal #present value of loan
 
-    @monthly_payment = "Replace this string with your answer."
-  end
+    #calculate monthly payment
+    @monthly_payment = (pv * rate * (1+rate) ** nper) / ((1+rate)**nper -1)
+end
 
-  def time_between
+def time_between
     @starting = Chronic.parse(params[:starting_time])
     @ending = Chronic.parse(params[:ending_time])
 
@@ -47,16 +55,18 @@ class CalculationsController < ApplicationController
     #   So if you subtract one time from another, you will get an integer
     #   number of seconds as a result.
     # ================================================================================
+    if (@starting == nil or @ending == nil) then
+        return
+    end
+    @seconds = @ending-@starting
+    @minutes = @seconds/60.0
+    @hours = @minutes/60.0
+    @days = @hours/24.0
+    @weeks = @days/7.0
+    @years = @days/365.0
+end
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
-  end
-
-  def descriptive_statistics
+def descriptive_statistics
     @numbers = params[:list_of_numbers].gsub(',', '').split.map(&:to_f)
 
     # ================================================================================
@@ -64,26 +74,66 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort
 
-    @count = "Replace this string with your answer."
+    @count = @numbers.length
 
-    @minimum = "Replace this string with your answer."
+    ##dont continue if there was nothing passed in
+    if @count == 0 then
+        return
+    end
 
-    @maximum = "Replace this string with your answer."
+    @minimum = @sorted_numbers[0]
 
-    @range = "Replace this string with your answer."
+    @maximum = @sorted_numbers[-1]
 
-    @median = "Replace this string with your answer."
+    @range = @maximum-@minimum
 
-    @sum = "Replace this string with your answer."
+    if (@count.to_i % 2)==1 then
+        #odd number of elements in array, take the middle element
+        @median = @sorted_numbers[@count.to_i/2]
+    else
+        #even number of elements in array, take mean of middle two elements
+        @median = (@sorted_numbers[@count.to_i/2] + @sorted_numbers[@count.to_i/2 - 1])/2.0
+    end
 
-    @mean = "Replace this string with your answer."
+    #calculating sum and mean
+    @sum = 0
+    @numbers.each do |num|
+        @sum+=num
+    end
+    @mean = @sum/@count.to_f
 
-    @variance = "Replace this string with your answer."
+    #calculating variance and standard_deviation
+    @sse = 0
+    @numbers.each do |num|
+        @sse+= (num-@mean) **2  #calculate sum of squared errors
+    end
+    @variance = @sse / (@count)
+    @standard_deviation = Math.sqrt(@variance)
 
-    @standard_deviation = "Replace this string with your answer."
+    #calculating mode - method #1: scanning the sorted array
+    current_number=
+    current_number_count =0
+    best_mode=0
+    best_mode_count=0
+    @sorted_numbers.each do |new_num|
+        if new_num == current_number then
+            #increment running total for this number
+            current_number_count+=1
+            #check if we beat the old mode
+            if current_number_count >= best_mode_count then
+                best_mode = current_number
+                best_mode_count = current_number_count
+            end
+        else
+            #reset running total for this number
+            current_number = new_num
+            current_number_count = 1
+        end
+    end
+    @mode = best_mode
 
-    @mode = "Replace this string with your answer."
-  end
+end
+
 end
