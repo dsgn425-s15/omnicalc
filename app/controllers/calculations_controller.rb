@@ -140,20 +140,19 @@ end
 def mode(list_of_numbers)
 
         list_of_numbers.each do |check|
-        count_"#{check}"=list_of_numbers.count(check)
-        number_"#{check}" = {:number => check, :count =>count_"#{check}"}}
+
+        @number = 1
+        count_@number = list_of_numbers.count("#{check}")
+        line_@number = {:number => "#{check}", :count =>"#{count_@number}"}
+        count_table = []
+        count_table.push (line_@number)
+        @number = @number+1
     end
-
-        running_total = 0
-        difference.each do |num|
-        running_total = running_total + num
-
-    end
-
-    return running_total/@count
+        count_table.sort
+        return count_table [0] [:number]
 end
 
-    @mode =
+    @mode = mode(@sorted_numbers)
 
   end
 end
