@@ -107,7 +107,7 @@ def descriptive_statistics
 
     @variance = @numbers.inject(0){|accum, i| accum +(i-@mean)**2}/(@count-1).to_f
 
-    @standard_deviation = @variance**(1/2)
+    @standard_deviation = @variance**(0.5)
 
     @mode = @numbers.max_by{ |v| @numbers.inject(Hash.new(0)) { |h,v| h[v] += 1; h }[v] }  #need to understand hash more and inject - passing through an array
 end
