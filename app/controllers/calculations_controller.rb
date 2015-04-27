@@ -72,26 +72,62 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+        @sorted_numbers = @numbers.map(&:to_i).sort
 
-    @count = "Replace this string with your answer."
+        @count = @numbers.count
 
-    @minimum = "Replace this string with your answer."
+        @minimum = @numbers.min
 
-    @maximum = "Replace this string with your answer."
+        @maximum = @numbers.max
 
-    @range = "Replace this string with your answer."
+        @range = @numbers.length
 
-    @median = "Replace this string with your answer."
+        def median(numbersArray)
+            ascend = numbersArray.sort
+            if ascend.length % 2 != 0
+                (ascend.length + 1) / 2.0
+            else
+                ((ascend.length/2.0) + ((ascend.length + 2)/2.0) / 2.0)
+            end
+        end
 
-    @sum = "Replace this string with your answer."
+        stemedian = median(@numbers)
 
-    @mean = "Replace this string with your answer."
+        @median = stemedian.to_s
 
-    @variance = "Replace this string with your answer."
+        @sum = @numbers.inject{|sum,x| sum + x }
 
-    @standard_deviation = "Replace this string with your answer."
+        @mean = @sum/@count
+
+        def variance(numberssArray)
+            running_total = 0
+            numberssArray.each do |array_value|
+                running_total = running_total + (@mean - array_value)**2
+            end
+
+            return answer = running_total/@count
+
+        end
+
+        stevariance = variance(@numbers)
+
+        @variance = stevariance.to_s
+
+        @standard_deviation = @variance.to_f**0.5
 
     @mode = "Replace this string with your answer."
+
+    #freq = @numbers.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
+    #@numbers.max_by { |v| freq[v] }
+
+    #@mode = @numbers.mode
+
+    #freq = arr.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
+    #arr.max_by { |v| freq[v] }
+
   end
 end
+
+
+
+
