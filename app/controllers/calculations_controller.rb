@@ -113,12 +113,11 @@ def descriptive_statistics
 
 # Thought process:
 # sort the array
-# go through each value in the array and check whether it equals the previous one
-# if it does, add 1 to counter
-# if it does not, push that value to a new array and reset counter to 0
-# get the max value from that array
-# go back throught the array and count the number of times each value exists
-# if the count of that array value equals the max, then return that value as the mode
+# create a new array
+# push the number of times each value appears into the new array
+# for each value in @number array, check how many times it appears
+# check what value from @numbers array has a count equal to the max of the values in the new array
+# this is the mode
 
 def mode
     counter_array = []
