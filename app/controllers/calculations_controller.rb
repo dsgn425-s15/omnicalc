@@ -10,14 +10,22 @@ class CalculationsController < ApplicationController
     # The special word the user input is in the string @special_word.
     # ================================================================================
 
+    #count occurences of special word by splitting string into an array and then checking every word to see if it's equal to special_word
+    count=0
+    @text.split.each do |word|
+        if word==@special_word
+        count=count+1
+        end
+    end
 
-    @character_count_with_spaces = "Replace this string with your answer."
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @character_count_with_spaces = @text.length
 
-    @word_count = "Replace this string with your answer."
+    @character_count_without_spaces = @text.length - @text.count(' ')
 
-    @occurrences = "Replace this string with your answer."
+    @word_count = @text.split.size
+
+    @occurrences = count
   end
 
   def loan_payment
@@ -31,8 +39,18 @@ class CalculationsController < ApplicationController
     # The number of years the user input is in the integer @years.
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
+    p=@principal
+    #n=months
+    n=@years*12
+    #apr in monthly terms
+    r=(@apr/100)/12
 
-    @monthly_payment = "Replace this string with your answer."
+#PMT = (P*r)/(1-(1+r)^-N)
+    pmt = 0.0
+    pmt = (p*r)/(1-((1+r)**(-n)))
+
+    @monthly_payment = pmt
+
   end
 
   def time_between
@@ -48,12 +66,15 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    #Note, years does not account for leap years..
+
+    @seconds = @ending-@starting
+    @minutes = @seconds/60
+    @hours = @minutes/60
+    @days = @hours/24
+    @weeks = @days/7
+    @years = @days/365
+
   end
 
   def descriptive_statistics
@@ -64,26 +85,69 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    sorted=@numbers.sort
+    len=@numbers.size
+    min=sorted.first
+    max=sorted.last
+    range=max-min
+    median= (sorted[(len-1)/2] + sorted[(len/2)])/2.0
 
-    @count = "Replace this string with your answer."
 
-    @minimum = "Replace this string with your answer."
+    #sum with iteration
+    sum=0.0
+    @numbers.each do |num|
+        sum=sum+num
+    end
 
-    @maximum = "Replace this string with your answer."
+    #mean
+    mean=sum/len
 
-    @range = "Replace this string with your answer."
+    #Variance
+    #start with sum of squares
+    ss=0.0
+    @numbers.each do |num|
+        ss=ss+(mean-num)**2
+    end
+    variance=ss/len
+    stdev=variance**0.5
 
-    @median = "Replace this string with your answer."
+    #IDEA FOR MODE
+    # Get Unique elements of number array
+    # Loop Unique array and count number of instances of each unique in the full array
+    # Enter the count and the unique number into the sub array or a larger array
+    #when loop is done, sort the larger array, then take the last sub array, second element.
 
-    @sum = "Replace this string with your answer."
+    unique=@numbers.uniq
+    container=[]
+    unique.each do |unq|
+        instances=sorted.select{|num| num==unq}
+        count=instances.count
+        container.push([count,unq])
+    end
 
-    @mean = "Replace this string with your answer."
+    mode=container.sort.last[1]
 
-    @variance = "Replace this string with your answer."
+    @sorted_numbers = sorted
 
-    @standard_deviation = "Replace this string with your answer."
+    @count = len
 
-    @mode = "Replace this string with your answer."
+    @minimum = min
+
+    @maximum = max
+
+    @range = range
+
+    @median = median
+
+    @sum = sum
+
+    @mean = mean
+
+    @variance = variance
+
+    @standard_deviation = stdev
+
+    @mode = mode
+
   end
 end
