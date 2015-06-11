@@ -5,10 +5,10 @@
   <div class="panel-body">
     <dl class="dl-horizontal">
       <dt>Starting Time</dt>
-      <dd><%= @starting.strftime("%l:%M%P on %B %e, %Y") %></dd>
+      <dd><%= if @starting then @starting.strftime("%l:%M%P on %B %e, %Y") end %></dd>
 
       <dt>Ending Time</dt>
-      <dd><%= @ending.strftime("%l:%M%P on %B %e, %Y") %></dd>
+      <dd><%= if @ending then @ending.strftime("%l:%M%P on %B %e, %Y") end %></dd>
 
       <dt>Seconds</dt>
       <dd><%= @seconds %></dd>
