@@ -10,17 +10,17 @@ class CalculationsController < ApplicationController
     # The special word the user input is in the string @special_word.
     # ================================================================================
 
+    @character_count_with_spaces = @text.length
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_without_spaces = @character_count_with_spaces - @text.count(" ")
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @word_count = @text.split(' ').count
 
-    @word_count = "Replace this string with your answer."
+    @occurrences = @text.downcase.scan(@special_word.downcase).count
 
-    @occurrences = "Replace this string with your answer."
-  end
+end
 
-  def loan_payment
+def loan_payment
     @apr = params[:annual_percentage_rate].to_f
     @years = params[:number_of_years].to_i
     @principal = params[:principal_value].to_f
@@ -32,10 +32,10 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
-  end
+    @monthly_payment = (@principal*(@apr/100/12))/(1-(1+@apr/100/12)**-(@years*12))
+end
 
-  def time_between
+def time_between
     @starting = Chronic.parse(params[:starting_time])
     @ending = Chronic.parse(params[:ending_time])
 
@@ -48,15 +48,17 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
-  end
+    @seconds = @ending - @starting
+    @minutes = @seconds/60
+    @hours = @minutes/60
+    @days = @hours/24
+    @weeks = @days/7
+    @months =@days/30
+    # months not showing
+    @years = @days/365
+end
 
-  def descriptive_statistics
+def descriptive_statistics
     @numbers = params[:list_of_numbers].gsub(',', '').split.map(&:to_f)
 
     # ================================================================================
@@ -64,26 +66,85 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
 
-    @count = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort_by(&:to_i)
 
-    @minimum = "Replace this string with your answer."
+    @count = @numbers.count
 
-    @maximum = "Replace this string with your answer."
+    @minimum = @numbers.min
 
-    @range = "Replace this string with your answer."
+    @maximum = @numbers.max
 
-    @median = "Replace this string with your answer."
+    @range = @maximum - @minimum
 
-    @sum = "Replace this string with your answer."
+    @median = median_array_of_numbers(@sorted_numbers)
 
-    @mean = "Replace this string with your answer."
+    @sum = @numbers.reduce(:+)
 
-    @variance = "Replace this string with your answer."
+    @mean = @sum/@count
 
-    @standard_deviation = "Replace this string with your answer."
+    @variance = variance_calc(@numbers)
 
-    @mode = "Replace this string with your answer."
+    @standard_deviation = std_dev_calc(@numbers)
+
+    @mode = mode_calc(@numbers)
+
+
+
+end
+
+
+# # mode_calc code
+
+def mode_calc(input_array)
+  count = Hash.new(0)
+  input_array.each do |number|
+    count[number] +=1
+  end
+  return count.sort_by { |k,v| v}.last.shift
+end
+  # shift drops the # of occurences from the return string
+
+
+# # median_calc code
+def median_array_of_numbers(input_array)
+  if input_array.length % 2 !=0
+     median_position = input_array.length / 2
+  return input_array[median_position]
+  else
+      first_position = input_array.length / 2
+      second_position = (input_array.length / 2) - 1
+      median_value = (input_array[first_position] + input_array[second_position])/2
+  return median_value
+
+      #  5 4 2 6 10 1 -- sorted input
+      #  1 2 4 5 6 10
+       # (4+5)/2. need postion 2 and position 3
+       #  length of array = 6. (6/2) & (6/2-1)
+
   end
 end
+
+
+# # variance_calc and std_dev_calc code
+
+def variance_calc(list_of_numbers)
+   mean = @mean
+   running_total = 0
+   list_of_numbers.each do |number|
+      diff = mean - number
+      square = diff**2
+      running_total = running_total + square
+  end
+  return running_total / list_of_numbers.length
+end
+
+
+def std_dev_calc(list_of_numbers)
+  return Math.sqrt((variance_calc(list_of_numbers).to_f))
+end
+
+end
+
+
+
