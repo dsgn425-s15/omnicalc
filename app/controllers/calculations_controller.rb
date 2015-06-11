@@ -1,23 +1,98 @@
 class CalculationsController < ApplicationController
+def sum(list_of_numbers)
+  running_total = 0
+  list_of_numbers.each do |number|
+    running_total = running_total + number
+  end
 
+  return running_total
+end
+
+# MEAN
+# ====
+# To find the mean of a set,
+#  - we sum up all the elements
+#  - then we divide the sum by the number of elements in the set
+
+def mean(list_of_numbers)
+  # Let's re-use the work we did above in the sum method
+  return sum(list_of_numbers).to_f/list_of_numbers.length
+    
+end
+
+# VARIANCE
+# ========
+# To find the variance of a set,
+#  - we find the mean of the set
+#  - for each number in the set,
+#   - we find the difference between the number and the mean
+#   - we square the difference
+#  - the variance is the mean of the squared differences
+
+def variance(list_of_numbers)
+  # Let's re-use the work we did above in the mean method
+  new_list=[]
+  set_mean = mean(list_of_numbers)
+  list_of_numbers.each do |number|
+    diff = number-set_mean
+    sqr = diff**2
+    new_list.push (sqr)
+  end
+  return mean(new_list)
+
+end
+
+def median(list_of_numbers)
+    sorted = list_of_numbers.sort
+    list_length = sorted.count
+    if list_length%2 == 0
+        return (sorted[list_length/2] + sorted[list_length/2 - 1])/2 
+    else
+        return sorted[(list_length-1)/2]
+    end
+end
+def mode(list_of_numbers)
+    sorted = list_of_numbers.sort
+    mode_number = sorted[0]
+    occurences = 1
+    max_occurences = 1
+    for i in 1..(sorted.count-1)
+        if sorted[i] == sorted[i-1]
+            occurences=occurences+1
+            if occurences > max_occurences
+                max_occurences = occurences
+                mode_number = sorted[i] 
+            end
+        else
+            occurences = 1
+        end
+    end
+    return mode_number
+end
+
+# STANDARD DEVIATION
+# ==================
+# To find the standard deviation of a set,
+#  - take the square root of the variance
+
+def standard_deviation(list_of_numbers)
+
+  return variance(list_of_numbers)**0.5
+
+end
   def word_count
     @text = params[:user_text]
     @special_word = params[:user_word]
 
-    # ================================================================================
-    # Your code goes below.
-    # The text the user input is in the string @text.
-    # The special word the user input is in the string @special_word.
-    # ================================================================================
+    text_wo_space = @text.gsub(' ','')
 
+    @character_count_with_spaces = @text.length.to_s
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_without_spaces = text_wo_space.length.to_s
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @word_count = @text.split(/\s+/).length.to_s
 
-    @word_count = "Replace this string with your answer."
-
-    @occurrences = "Replace this string with your answer."
+    @occurrences = @text.split.count(@special_word)
   end
 
   def loan_payment
@@ -25,65 +100,45 @@ class CalculationsController < ApplicationController
     @years = params[:number_of_years].to_i
     @principal = params[:principal_value].to_f
 
-    # ================================================================================
-    # Your code goes below.
-    # The annual percentage rate the user input is in the decimal @apr.
-    # The number of years the user input is in the integer @years.
-    # The principal value the user input is in the decimal @principal.
-    # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    @monthly_payment = (@principal*@apr/1200)/(1-(1+@apr/1200)**(-12*@years))
   end
 
   def time_between
     @starting = Chronic.parse(params[:starting_time])
     @ending = Chronic.parse(params[:ending_time])
 
-    # ================================================================================
-    # Your code goes below.
-    # The start time is in the Time @starting.
-    # The end time is in the Time @ending.
-    # Note: Ruby stores Times in terms of seconds since Jan 1, 1970.
-    #   So if you subtract one time from another, you will get an integer
-    #   number of seconds as a result.
-    # ================================================================================
-
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = @ending-@starting
+    @minutes = @seconds/60
+    @hours = @minutes/60
+    @days = @hours/24
+    @weeks = @days/7
+    @years = @weeks/52
   end
 
   def descriptive_statistics
     @numbers = params[:list_of_numbers].gsub(',', '').split.map(&:to_f)
 
-    # ================================================================================
-    # Your code goes below.
-    # The numbers the user input are in the array @numbers.
-    # ================================================================================
+    @sorted_numbers = @numbers.sort
 
-    @sorted_numbers = "Replace this string with your answer."
+    @count = @numbers.count
 
-    @count = "Replace this string with your answer."
+    @minimum = @numbers.min
 
-    @minimum = "Replace this string with your answer."
+    @maximum = @numbers.max
 
-    @maximum = "Replace this string with your answer."
+    @range = @numbers.max-@numbers.min
 
-    @range = "Replace this string with your answer."
+    @median = median(@numbers)
 
-    @median = "Replace this string with your answer."
+    @sum = @numbers.sum
 
-    @sum = "Replace this string with your answer."
+    @mean = mean(@numbers)
 
-    @mean = "Replace this string with your answer."
+    @variance = variance(@numbers)
 
-    @variance = "Replace this string with your answer."
+    @standard_deviation = standard_deviation(@numbers)
 
-    @standard_deviation = "Replace this string with your answer."
-
-    @mode = "Replace this string with your answer."
+    @mode = mode(@numbers)
   end
 end
