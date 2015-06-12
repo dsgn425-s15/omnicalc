@@ -10,14 +10,18 @@ class CalculationsController < ApplicationController
     # The special word the user input is in the string @special_word.
     # ================================================================================
 
+    @character_count_with_spaces = @text.length
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @spaces = @text.delete" "
+    @character_count_without_spaces = @spaces.length
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @word_count_array = @text.split
+    @word_count = @word_count_array.length
 
-    @word_count = "Replace this string with your answer."
+    @text2 = @text.downcase
+    @special_word2 = @special_word.downcase
+    @occurrences = @text2.scan(@special_word2).count
 
-    @occurrences = "Replace this string with your answer."
   end
 
   def loan_payment
@@ -32,7 +36,7 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    @monthly_payment = @principal / ((1+@apr/100)**@years)
   end
 
   def time_between
@@ -48,12 +52,12 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = @ending - @starting
+    @minutes = (@ending - @starting)/60
+    @hours = (@ending - @starting)/60/60
+    @days = (@ending - @starting)/60/60/24
+    @weeks = (@ending - @starting)/60/60/24/7
+    @years = (@ending - @starting)/60/60/24/7/52
   end
 
   def descriptive_statistics
@@ -64,25 +68,26 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort
 
-    @count = "Replace this string with your answer."
+    @count = @numbers.count
 
-    @minimum = "Replace this string with your answer."
+    @minimum = @numbers.min
 
-    @maximum = "Replace this string with your answer."
+    @maximum = @numbers.max
 
-    @range = "Replace this string with your answer."
+    @range = @numbers.max - @numbers.min
 
-    @median = "Replace this string with your answer."
+    @median = (@numbers[(@numbers.length-1)/2] + @numbers[(@numbers.length)/2])/2
 
-    @sum = "Replace this string with your answer."
+    @sum = @numbers.inject(:+)
 
-    @mean = "Replace this string with your answer."
+    @mean = @numbers.inject(:+) / @numbers.count
+
 
     @variance = "Replace this string with your answer."
 
-    @standard_deviation = "Replace this string with your answer."
+    @standard_deviation = @variance.sqrt
 
     @mode = "Replace this string with your answer."
   end
