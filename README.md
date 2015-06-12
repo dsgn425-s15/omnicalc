@@ -1,4 +1,4 @@
-# Omnicalc
+<!-- # Omnicalc
 
 The goal of this project is to get more practice with writing Ruby programs; but now, you are going to see your output in the browser rather than in Terminal.
 
@@ -63,7 +63,7 @@ It is a collection of calculators that do various things; count the number of wo
 
  1. You have to figure out how to calculate the correct value for the rest: `@character_count_without_spaces`, `@word_count`, and `@occurrences`. Don't change the names of these variables; if you do, your results won't appear in the browser in the end.
  1. Refresh the results page in your browser to re-run your code and see new output.
- 1. You can write as much or as little code as it takes to produce the correct answer; create intermediate variables if you want, or do anything else that you learned about from Pine (except we don't use `puts` and `gets` for output and input anymore). It's all just the same Ruby as before.
+ 1. You can write as much or as little code as it takes to produce the correct answer; create intermediate variables if you want, or do anything else that you learned about from Pine (except we don't use `puts` and `gets` for output and input anymore). It's all just the same Ruby as before. -->
  1. Similarly, next work on `def loan_payment` and check your output by submitting the form located at http://localhost:3000/loan_payment/new
  1. Some tasks are easier, some are much harder. For example, in the Descriptive Statistics calculator, finding the mode (the number that occurs most frequently in a list of numbers) is surprisingly hard. Do your best, but don't get discouraged if you can't quite solve it.
  1. In the `essential_ruby` repository from class, there are some comments in `8_return_values.rb` and `challenge_1.rb` that may be helpful for finding some of the formulae you'll need.
