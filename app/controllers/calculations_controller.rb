@@ -1,23 +1,21 @@
 class CalculationsController < ApplicationController
 
+
   def word_count
     @text = params[:user_text]
     @special_word = params[:user_word]
 
-    # ================================================================================
-    # Your code goes below.
-    # The text the user input is in the string @text.
-    # The special word the user input is in the string @special_word.
-    # ================================================================================
 
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    number_of_spaces = @text.count(' ')
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @character_count_with_spaces = @text.length
 
-    @word_count = "Replace this string with your answer."
+    @character_count_without_spaces = @text.length - number_of_spaces
 
-    @occurrences = "Replace this string with your answer."
+    @word_count = @text.split.length
+
+    @occurrences = @text.split.count(@special_word.to_s)
   end
 
   def loan_payment
@@ -25,6 +23,9 @@ class CalculationsController < ApplicationController
     @years = params[:number_of_years].to_i
     @principal = params[:principal_value].to_f
 
+    # formula: PMT = (P*r)/(1-(1+r)^-N)
+
+    pmt = (@principal*@apr/1200)/(1-(1+@apr/1200)**(-12*@years))
     # ================================================================================
     # Your code goes below.
     # The annual percentage rate the user input is in the decimal @apr.
@@ -32,7 +33,7 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    @monthly_payment = pmt.to_s
   end
 
   def time_between
@@ -48,42 +49,145 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = @ending - @starting
+    @minutes = @seconds/60
+    @hours = @minutes/60
+    @days = @hours/24
+    @weeks = @days/7
+    @years = @weeks/52
   end
 
   def descriptive_statistics
-    @numbers = params[:list_of_numbers].gsub(',', '').split.map(&:to_f)
-
+    #@numbers = params[:list_of_numbers].gsub(',', '').split.map(&:to_f)
+    @numbers = params[:list_of_numbers].split(',').map(&:to_f)
+    #@numbers = params[:list_of_numbers]
     # ================================================================================
     # Your code goes below.
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
 
-    @count = "Replace this string with your answer."
+    def sum_me(number_array_to_sum)
+        sum = 0
+        number_array_to_sum.each do |rolling|
+            sum = sum + rolling
+        end
+    return sum
+    end
 
-    @minimum = "Replace this string with your answer."
 
-    @maximum = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort
 
-    @range = "Replace this string with your answer."
+    @count = @numbers.length
 
-    @median = "Replace this string with your answer."
 
-    @sum = "Replace this string with your answer."
+    @minimum = @numbers.sort[0]
 
-    @mean = "Replace this string with your answer."
+    @maximum = @numbers.sort[@numbers.length-1]
 
-    @variance = "Replace this string with your answer."
+    @range = @maximum - @minimum
+    numbers_length = @numbers.length
+    numbers_length_half = numbers_length/2
 
-    @standard_deviation = "Replace this string with your answer."
+    median =''.to_f
 
-    @mode = "Replace this string with your answer."
+    if numbers_length%2 == 0
+       median = (@numbers.sort[numbers_length/2] + @numbers.sort[numbers_length/2-1])/2
+    end
+
+  if numbers_length%2 == 1
+       median = @numbers.sort[numbers_length/2+0.5]
+    end
+
+    @median = median
+    sum = sum_me(@numbers)
+
+
+
+
+    @sum = sum
+
+    @mean = sum/@numbers.length
+
+    array_for_variance = []
+    variance_calc1 = 0
+    @numbers.each do |variance_variable|
+        variance_calc1 = (variance_variable-@mean)**2
+        array_for_variance.push(variance_calc1)
+    end
+
+    variance = sum_me(array_for_variance)/array_for_variance.length
+
+
+    @variance = variance
+
+    @standard_deviation = variance**0.5
+
+
+
+
+##mode stuff begins
+
+numbers_sorted = @numbers.sort
+
+
+
+counter = 0
+while_counter = 0
+i = numbers_sorted[0]
+count_of_current_number = 0
+hashes = []
+hash_counter = 0
+
+while counter < numbers_sorted.length
+
+  i = numbers_sorted[counter]
+  #puts "current number under consideration is #{numbers_sorted[counter]}"
+
+  if numbers_sorted[counter+1] == i
+    count_of_current_number = count_of_current_number + 1
+     #puts "count of current number is #{count_of_current_number}"
+  end
+
+
+
+  if numbers_sorted[counter+1] != i
+    hashes[hash_counter] = { "number" => i.to_s , "count" => (count_of_current_number+1).to_s}
+    #puts "Current number counter is #{hashes[hash_counter]}"
+
+    count_of_current_number = 0
+    hash_counter = hash_counter+1
+
+  end
+  counter = counter+1
+
+  #puts "lenght of hashes is #{hashes.length}"
+
+end
+
+counter2 = 0
+
+countsArray = []
+numbersArray = []
+
+while counter2 < hashes.length
+  #puts hashes[counter2].to_s
+  numbersArray[counter2] = hashes[counter2]["number"]
+  countsArray[counter2] = hashes[counter2]["count"]
+  counter2 = counter2+1
+end
+
+# puts numbersArray.to_s
+# puts countsArray.to_s
+
+modeIndex = countsArray.index(countsArray.max)
+
+mode = numbersArray[modeIndex]
+
+
+
+
+    @mode = mode
+    #yesss
   end
 end
