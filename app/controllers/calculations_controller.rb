@@ -11,14 +11,20 @@ class CalculationsController < ApplicationController
     # ================================================================================
 
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_with_spaces = "@text.length"
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @character_count_without_spaces = @text.length - @text.scan("").count
 
-    @word_count = "Replace this string with your answer."
+    @word_count = @text.scan("").count + 1
 
-    @occurrences = "Replace this string with your answer."
+    @occurrences = @text.length
+
+end
+
+@character_count_with_spaces
   end
+
+
 
   def loan_payment
     @apr = params[:annual_percentage_rate].to_f
