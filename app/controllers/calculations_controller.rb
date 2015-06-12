@@ -11,13 +11,13 @@ class CalculationsController < ApplicationController
     # ================================================================================
 
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_with_spaces = @text.length
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @character_count_without_spaces = @text.split.length
 
-    @word_count = "Replace this string with your answer."
+    @word_count = @text.split.count
 
-    @occurrences = "Replace this string with your answer."
+    @occurrences = @text.count(@special_word)
   end
 
   def loan_payment
@@ -32,7 +32,12 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    @monthly_payment = @apr/100/12 * @principal / (1 - (1 + @apr/100/12) ** (-@years * 12))
+
+
+
+
+
   end
 
   def time_between
@@ -48,12 +53,14 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = @ending - @starting
+    @minutes = @seconds/60
+    @hours = @minutes/60
+    @days = @hours/24
+    @weeks = @days/7
+    @months= @weeks/4
+    @years = @weeks/52
+
   end
 
   def descriptive_statistics
@@ -64,26 +71,36 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort
 
-    @count = "Replace this string with your answer."
+    @count = @numbers.count
 
-    @minimum = "Replace this string with your answer."
+    @minimum = @numbers.min
 
-    @maximum = "Replace this string with your answer."
+    @maximum = @numbers.max
 
-    @range = "Replace this string with your answer."
+    @range = @maximum-@minimum
 
-    @median = "Replace this string with your answer."
+    @median= (@sorted_numbers[(@sorted_numbers.length-1)/2]+@sorted_numbers[@sorted_numbers.length/2])/2.0
 
-    @sum = "Replace this string with your answer."
 
-    @mean = "Replace this string with your answer."
+    @sum = @numbers.sum
 
-    @variance = "Replace this string with your answer."
+    @mean = @sum/@count
 
-    @standard_deviation = "Replace this string with your answer."
+    @variance = 0
 
-    @mode = "Replace this string with your answer."
+    @numbers.each do |x|
+        @variance=@variance+(x-@mean)**2
+    end
+    @variance=@variance/(@numbers.length)
+
+    @standard_deviation = Math.sqrt(@variance)
+
+    @freq = @numbers.inject(Hash.new(0)){|h,v| h[v]+=1;h}
+
+    @mode = @numbers.max_by{|v| @freq[v]}
+
   end
-end
+
+  end
