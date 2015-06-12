@@ -1,6 +1,6 @@
 class CalculationsController < ApplicationController
 
-  def word_count
+def word_count
     @text = params[:user_text]
     @special_word = params[:user_word]
 
@@ -11,19 +11,21 @@ class CalculationsController < ApplicationController
     # ================================================================================
 
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_with_spaces = @text.length
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @character_count_without_spaces = @text.length - @text.scan(' ').length
 
-    @word_count = "Replace this string with your answer."
+    @word_count = @text.split(/\s+/).length
 
-    @occurrences = "Replace this string with your answer."
-  end
+    @occurrences = @text.scan(/\w+/).count(@special_word)
+end
 
-  def loan_payment
+
+def loan_payment
     @apr = params[:annual_percentage_rate].to_f
     @years = params[:number_of_years].to_i
     @principal = params[:principal_value].to_f
+    @rate = @apr/100
 
     # ================================================================================
     # Your code goes below.
@@ -32,10 +34,10 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
-  end
+    @monthly_payment = ((@principal*@rate)/(1-((1+@rate)**-@years)))/12
+end
 
-  def time_between
+def time_between
     @starting = Chronic.parse(params[:starting_time])
     @ending = Chronic.parse(params[:ending_time])
 
@@ -48,15 +50,15 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
-  end
+    @seconds = @ending - @starting
+    @minutes = @seconds / 60
+    @hours = @minutes / 60
+    @days = @hours / 24
+    @weeks = @days / 7
+    @years = @weeks / 52
+end
 
-  def descriptive_statistics
+def descriptive_statistics
     @numbers = params[:list_of_numbers].gsub(',', '').split.map(&:to_f)
 
     # ================================================================================
@@ -64,26 +66,46 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort
 
-    @count = "Replace this string with your answer."
+    @count = @numbers.length
 
-    @minimum = "Replace this string with your answer."
+    @minimum = @numbers.min
 
-    @maximum = "Replace this string with your answer."
+    @maximum = @numbers.max
 
-    @range = "Replace this string with your answer."
+    @range = @numbers.max - @numbers.min
 
-    @median = "Replace this string with your answer."
+    def median (numbers)
+        sorted_numbers = numbers.sort
+        length_of_array = numbers.length
+        return (sorted_numbers[(length_of_array -1)/2] + sorted_numbers[length_of_array / 2]) / 2
+    end
 
-    @sum = "Replace this string with your answer."
+    @median = median(@numbers)
 
-    @mean = "Replace this string with your answer."
+    @sum = @numbers.inject{|sum,x| sum+x}
 
-    @variance = "Replace this string with your answer."
+    @mean = @sum / @count
 
-    @standard_deviation = "Replace this string with your answer."
+def variance
+    running_total = 0
+    @numbers.each do |array_value|
+        running_total = running_total + (@mean - array_value)**2
+    end
 
-    @mode = "Replace this string with your answer."
-  end
+    return answer = running_total/@count
+
 end
+
+
+    @variance = variance
+
+    @standard_deviation = Math.sqrt(@variance)
+
+    @mode = @numbers.max_by{|x| @numbers.count(x)}
+
+
+end
+end
+
