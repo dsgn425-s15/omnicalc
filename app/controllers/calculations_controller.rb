@@ -9,21 +9,23 @@ class CalculationsController < ApplicationController
     # The text the user input is in the string @text.
     # The special word the user input is in the string @special_word.
     # ================================================================================
+    
 
+    @character_count_with_spaces = @text.length
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_without_spaces = @text.length - @text.scan(' ').length 
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @word_count = @text.split.size
 
-    @word_count = "Replace this string with your answer."
-
-    @occurrences = "Replace this string with your answer."
+    @occurrences = @text.upcase.scan(@special_word.upcase).size
   end
 
   def loan_payment
     @apr = params[:annual_percentage_rate].to_f
     @years = params[:number_of_years].to_i
     @principal = params[:principal_value].to_f
+    @mpr = @apr/1200.to_f
+    @period = @years*12.to_i
 
     # ================================================================================
     # Your code goes below.
@@ -32,7 +34,7 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    @monthly_payment = (((1+@mpr)**@period)*@principal*@mpr)/(((1+@mpr)**@period)-1)
   end
 
   def time_between
@@ -48,13 +50,31 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = @ending - @starting
+    @minutes = @seconds/60
+    @hours = @minutes/60
+    @days = @hours/24
+    @weeks = @days/7
+    @years = @weeks/52
   end
+
+    def median(list_of_numbers)
+        sorted=list_of_numbers.sort
+        length=sorted.length
+        return (sorted[(length-1)/2] + sorted[length/2])/2.0
+    end
+
+    def variance(list_of_numbers)
+        running_total = 0
+        list_of_numbers.each do |array_value|
+            running_total = running_total + (@mean - array_value)**2
+        end
+        return answer = running_total/@count
+    end
+
+    def mode(list_of_numbers)
+        list_of_numbers.mode
+    end
 
   def descriptive_statistics
     @numbers = params[:list_of_numbers].gsub(',', '').split.map(&:to_f)
@@ -64,26 +84,27 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort
 
-    @count = "Replace this string with your answer."
+    @count = @numbers.count
 
-    @minimum = "Replace this string with your answer."
+    @minimum = @numbers.min
 
-    @maximum = "Replace this string with your answer."
+    @maximum = @numbers.max
 
-    @range = "Replace this string with your answer."
+    @range = @numbers.max - @numbers.min
 
-    @median = "Replace this string with your answer."
+    @median = median(@numbers)
+       
+    @sum = @numbers.inject{|sum,x| sum + x }
+    
+    @mean = @sum/@count
 
-    @sum = "Replace this string with your answer."
+    @variance = variance(@numbers)
 
-    @mean = "Replace this string with your answer."
+    @standard_deviation = Math.sqrt(@variance)
 
-    @variance = "Replace this string with your answer."
-
-    @standard_deviation = "Replace this string with your answer."
-
-    @mode = "Replace this string with your answer."
+    @mode = @numbers.max_by{|x| @numbers.count(x) }
+  
   end
 end
