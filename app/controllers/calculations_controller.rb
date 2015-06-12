@@ -4,20 +4,26 @@ class CalculationsController < ApplicationController
     @text = params[:user_text]
     @special_word = params[:user_word]
 
-    # ================================================================================
-    # Your code goes below.
-    # The text the user input is in the string @text.
-    # The special word the user input is in the string @special_word.
-    # ================================================================================
+    @character_count_with_spaces = @text.length
 
+    string_no_space = @text.gsub(/\s+/,"")
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_without_spaces = string_no_space.length
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @word_count = @text.split.count
 
-    @word_count = "Replace this string with your answer."
+    special_count = 0
+    text_array = @text.split
+    text_array.each do |word|
+        if word.downcase == @special_word.downcase
+          special_count += 1
+        end
+    end
 
-    @occurrences = "Replace this string with your answer."
+    # @text.scan(/\w+/).count(@special_word)
+    # works but doesn't handle different capitalization
+
+    @occurrences = special_count
   end
 
   def loan_payment
@@ -32,7 +38,11 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    p = @principal
+    r = (@apr/12)/100
+    n = @years*12
+
+    @monthly_payment = ((p*r)*(1+r)**n)/(((1+r)**n)-1)
   end
 
   def time_between
@@ -48,12 +58,12 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = @ending - @starting
+    @minutes = @seconds/60
+    @hours = @minutes/60
+    @days = @hours/24
+    @weeks = @days/7
+    @years = @days/365
   end
 
   def descriptive_statistics
@@ -64,26 +74,61 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort
 
-    @count = "Replace this string with your answer."
+    @count = @numbers.length
 
-    @minimum = "Replace this string with your answer."
+    @minimum = @sorted_numbers[0]
 
-    @maximum = "Replace this string with your answer."
+    @maximum = @sorted_numbers.last
 
-    @range = "Replace this string with your answer."
+    @range = @maximum-@minimum
 
-    @median = "Replace this string with your answer."
+    median = 0
+    if @count%2 == 0
+        median = ((@sorted_numbers[@count/2]+@sorted_numbers[(@count/2)-1])/2)
+    else
+        median = (@sorted_numbers[@count/2])
+    end
 
-    @sum = "Replace this string with your answer."
+    @median = median
 
-    @mean = "Replace this string with your answer."
+    sum = 0
+    @numbers.each do |number|
+        sum = sum + number
+    end
 
-    @variance = "Replace this string with your answer."
+    @sum = sum
 
-    @standard_deviation = "Replace this string with your answer."
+    @mean = @sum/@count.to_f
 
-    @mode = "Replace this string with your answer."
+    resid_sq = 0
+    @numbers.each do |number|
+        resid_sq = resid_sq + (number - @mean)**2
+    end
+
+    @variance = resid_sq/@count.to_f
+
+    @standard_deviation = @variance**0.5
+
+    # the method below should allow for multiple modes but I can't quite get it to work
+    #
+    # freq = Hash.new(0)
+    # @numbers.each do |number|
+    #     freq[number] += 1
+    # end
+    # mode_array = []
+    # freq.each do |freq, number|
+    #     if number == freq.values.max
+    #         mode_array << number
+    #     end
+    # end
+    # mode_array.sort
+
+    freq_array = @numbers
+    freq = freq_array.inject(Hash.new(0)) {|h,v| h[v] +=1; h}
+    mode = freq_array.max_by {|v| freq[v]}
+
+    @mode = mode
   end
 end
