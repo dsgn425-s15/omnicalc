@@ -11,13 +11,17 @@ class CalculationsController < ApplicationController
     # ================================================================================
 
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_with_spaces = @text.length
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @character_count_without_spaces = @text.gsub(" ",'').length
 
-    @word_count = "Replace this string with your answer."
+    @word_count = @text.split.size
 
-    @occurrences = "Replace this string with your answer."
+    if @special_word == ""
+        @occurrences = 0
+    else
+        @occurrences = @text.scan(@special_word).count
+    end
   end
 
   def loan_payment
@@ -32,7 +36,9 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    @monthly_payment = (@principal*(@apr/100/12))/(1-(1+@apr/100/12)**-(@years*12))
+
+    #PMT = (P*r)/(1-(1+r)^-N)
   end
 
   def time_between
